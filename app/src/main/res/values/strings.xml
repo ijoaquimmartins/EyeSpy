@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">EyeSpy</string>
+    <string name="app_name">Eye Spy</string>
+
+    <string name="login">LOGIN</string>
+    <string name="cancel">CANCEL</string>
+
 </resources>
