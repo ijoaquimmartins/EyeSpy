@@ -3,13 +3,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:orientation="vertical"
         android:gravity="bottom"
-        android:background="@drawable/drawer_border"
+        android:background="@drawable/header_bk"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <ImageView
             android:layout_width="85dp"
@@ -35,13 +34,12 @@
             android:layout_marginBottom="16dp"
             android:layout_marginStart="20dp"/>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ll_Home"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -56,8 +54,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ll_Register"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -72,8 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ll_ShiftTimings"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -82,6 +80,95 @@
             android:text="Shift Timings"
             android:textSize="24sp"
             android:drawableLeft="@drawable/ic_shift"
+            android:drawablePadding="8dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_AssignShift"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/levendar"
+            android:text="Assign Shift"
+            android:textSize="24sp"
+            android:drawableLeft="@drawable/ic_assignshift"
+            android:drawablePadding="8dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_Attendance"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/levendar"
+            android:text="Attendance"
+            android:textSize="24sp"
+            android:drawableLeft="@drawable/ic_attendance"
+            android:drawablePadding="8dp"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/levendar"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_Logout"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/levendar"
+            android:text="Logout"
+            android:textSize="24sp"
+            android:drawableLeft="@drawable/ic_attendance"
+            android:drawablePadding="8dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_Exit"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/levendar"
+            android:text="Exit"
+            android:textSize="24sp"
+            android:drawableLeft="@drawable/ic_attendance"
+            android:drawablePadding="8dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_App_Ver_Up"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_gravity="bottom">
+        <TextView
+            android:id="@+id/tv_App_Ver_Up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/levendar"
+            android:text="Ver 2.1.8 c"
+            android:textSize="24sp"
             android:drawablePadding="8dp"/>
     </LinearLayout>
 
