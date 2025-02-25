@@ -150,7 +150,7 @@
             android:textColor="@color/levendar"
             android:text="Exit"
             android:textSize="24sp"
-            android:drawableLeft="@drawable/ic_attendance"
+            android:drawableLeft="@drawable/ic_exit"
             android:drawablePadding="8dp"/>
     </LinearLayout>
     <LinearLayout

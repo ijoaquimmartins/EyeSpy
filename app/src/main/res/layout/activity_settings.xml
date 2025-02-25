@@ -12,27 +12,18 @@ tools:context=".SettingsActivity">
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <include layout="@layout/toolbar"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:layout_gravity="center"
-        android:layout_marginTop="400dp"
-        android:textSize="16sp"/>
+<!-- Layout Code Start -->
+
+<!-- Layout Code End -->
 
 </LinearLayout>
-
 <RelativeLayout
     android:layout_width="300dp"
     android:layout_height="match_parent"
     android:background="@color/levendar"
     android:layout_gravity="start">
-
     <include layout="@layout/nav_drawer"/>
 </RelativeLayout>
-
-
 </androidx.drawerlayout.widget.DrawerLayout>
