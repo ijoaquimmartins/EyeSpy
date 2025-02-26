@@ -14,109 +14,197 @@
         <include layout="@layout/toolbar"/>
 
 <!-- Layout Code Start -->
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:orientation="vertical"
-            android:scrollbars="vertical">
+            android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                >
-                <TextView
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="serif"
+                        android:text="Registration Form"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioGroup
+                        android:id="@+id/rg_RegType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_SecurityGaurd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="Security Gaurd" />
+
+                        <RadioButton
+                            android:id="@+id/rb_User"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="User" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/et_FirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/fname"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_MiddleName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Middle Name"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_LastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/lname"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_DateOfBirth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableEnd="@drawable/ic_calendar"
+                    android:hint="@string/dob"
+                    android:inputType="date"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_MobileNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_Email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/mobileno"
+                    android:inputType="number"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_AadharCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Aadhar Card No"
+                    android:inputType="number"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_PAN"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="PAN Card"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_PassportNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Passport No"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_PermanentAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="top|start"
+                    android:hint="@string/permanentadd"
+                    android:inputType="textCapSentences|textNoSuggestions|textMultiLine"
+                    android:lines="5"
+                    android:scrollbars="horizontal" />
+
+                <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Registration Form"
-                    android:layout_marginBottom="10dp"/>
-            </LinearLayout>
+                    android:text="Same As Above" />
 
-            <EditText
-                android:id="@+id/et_FirstName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/fname"
-                android:scrollbars="horizontal"/>
-            <EditText
-                android:id="@+id/et_MiddleName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Middle Name"
-                android:scrollbars="horizontal"/>
-            <EditText
-                android:id="@+id/et_LastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/lname"
-                android:scrollbars="horizontal"/>
-            <EditText
-                android:id="@+id/et_DateOfBirth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/dob"
-                android:inputType="date"
-                android:scrollbars="horizontal"
-                android:drawableEnd="@drawable/ic_calendar"/>
-            <EditText
-                android:id="@+id/et_MobileNo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/mobileno"
-                android:inputType="number"
-                android:scrollbars="horizontal"/>
-            <EditText
-                android:id="@+id/et_AadharCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Aadhar Card No"
-                android:inputType="number"
-                android:scrollbars="horizontal"/>
-            <EditText
-                android:id="@+id/et_PAN"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="PAN Card"
-                android:scrollbars="horizontal"/>
-            <EditText
-                android:id="@+id/et_PassportNo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Passport"
-                android:scrollbars="horizontal"/>
-            <EditText
-                android:id="@+id/et_PermanentAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/permanentadd"
-                android:lines="5"
-                android:scrollbars="horizontal"
-                android:gravity="top|start"
-                android:inputType="textCapSentences|textNoSuggestions|textMultiLine"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Same As Above" />
-            <EditText
-                android:id="@+id/et_CurrentAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/currentadd"
-                android:lines="5"
-                android:scrollbars="horizontal"
-                android:gravity="top|start"
-                android:inputType="textCapSentences|textNoSuggestions|textMultiLine"/>
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/et_CurrentAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="top|start"
+                    android:hint="@string/currentadd"
+                    android:inputType="textCapSentences|textNoSuggestions|textMultiLine"
+                    android:lines="5"
+                    android:scrollbars="horizontal" />
+
+                <EditText
+                    android:id="@+id/et_UserId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/username" />
+                <EditText
+                    android:id="@+id/et_Password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+                    <Button
+                        android:id="@+id/btn_CheckUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Check" />
+                    <TextView
+                        android:id="@+id/tv_UsrNmChkMsg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Check Error Massage"/>
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_ProfilePhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:src="@drawable/ic_calendar"/>
+            </LinearLayout>
+        </ScrollView>
         <!-- Layout Code End -->
     </LinearLayout>
     <RelativeLayout
