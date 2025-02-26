@@ -4,4 +4,10 @@
     <string name="login">LOGIN</string>
     <string name="cancel">CANCEL</string>
 
+    <string name="fname">First Name<font color="red">*</font></string>
+    <string name="lname">Last Name<font color="red">*</font></string>
+    <string name="dob">Date Of Birth<font color="red">*</font></string>
+    <string name="mobileno">Mobile No.<font color="red">*</font></string>
+    <string name="permanentadd">Permanent Address<font color="red">*</font></string>
+    <string name="currentadd">Current Address<font color="red">*</font></string>
 </resources>
