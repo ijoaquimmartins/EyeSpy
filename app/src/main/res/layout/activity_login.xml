@@ -8,26 +8,22 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".Login">
-
     <ImageView
         android:layout_width="250dp"
         android:layout_height="280dp"
         android:src="@drawable/eyespy_ioc" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textStyle="bold|italic"
         android:textSize="42sp" />
-
     <EditText
         android:id="@+id/et_UserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:hint="User ID" />
-
+        android:hint="Reg. Mobile No" />
     <EditText
         android:id="@+id/et_Password"
         android:layout_width="match_parent"
@@ -35,19 +31,16 @@
         android:layout_margin="10dp"
         android:hint="Password"
         android:inputType="textPassword" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
-
         <Button
             android:id="@+id/btn_Login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/login" />
-
         <Button
             android:id="@+id/btn_Cancel"
             android:layout_width="wrap_content"
@@ -55,12 +48,10 @@
             android:layout_margin="10dp"
             android:text="@string/cancel" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="bottom">
-
         <TextView
             android:id="@+id/tv_App_version"
             android:layout_width="wrap_content"

@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include layout="@layout/toolbar"/>
-<!-- Layout Code Start -->
+        <include layout="@layout/toolbar" />
+        <!-- Layout Code Start -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -49,20 +49,26 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            android:text="Security Gaurd"
-                            android:paddingEnd="10dp"/>
+                            android:paddingEnd="10dp"
+                            android:text="Security Gaurd" />
                         <RadioButton
                             android:id="@+id/rb_User"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="User"
-                            android:paddingEnd="10dp"/>
+                            android:paddingEnd="10dp"
+                            android:text="User" />
+                        <RadioButton
+                            android:id="@+id/rb_other"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="10dp"
+                            android:text="Others" />
                         <RadioButton
                             android:id="@+id/rb_Admin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Admin"
-                            android:paddingEnd="10dp"/>
+                            android:paddingEnd="10dp"
+                            android:text="Admin" />
                     </RadioGroup>
                 </LinearLayout>
                 <EditText
@@ -70,9 +76,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:drawableEnd="@drawable/ic_calendar"
                     android:hint="@string/doj"
-                    android:scrollbars="horizontal"
-                    android:drawableEnd="@drawable/ic_calendar"/>
+                    android:scrollbars="horizontal" />
                 <EditText
                     android:id="@+id/et_FirstName"
                     android:layout_width="match_parent"
@@ -154,7 +160,7 @@
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Same As Above"/>
+                    android:text="Same As Above" />
                 <EditText
                     android:id="@+id/et_CurrentAddress"
                     android:layout_width="match_parent"
@@ -173,37 +179,37 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal">
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
                     <Button
                         android:id="@+id/btn_Clickphoto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Profile Photo"
-                        android:drawableEnd="@drawable/ic_camera"/>
+                        android:drawableEnd="@drawable/ic_camera"
+                        android:text="Profile Photo" />
                     <ImageView
                         android:id="@+id/iv_ProfilePhoto"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"/>
+                        android:layout_height="200dp" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="10dp">
+                    android:orientation="horizontal">
                     <Button
                         android:id="@+id/btn_Submit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="@string/submit"/>
+                        android:text="@string/submit" />
                     <Button
                         android:id="@+id/btn_Cancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="@string/cancel"/>
+                        android:text="@string/cancel" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
