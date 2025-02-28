@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
     ImageView menu;
-    LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_AssignShift, ll_Attendance, ll_Logout, ll_Exit ;
+    LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_Attendance, ll_Logout, ll_Exit ;
     TextView tv_App_Ver_Up;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         ll_Home = findViewById(R.id.ll_Home);
         ll_Register = findViewById(R.id.ll_Register);
         ll_ShiftTimings = findViewById(R.id.ll_ShiftTimings);
-        ll_AssignShift = findViewById(R.id.ll_AssignShift);
         ll_Attendance = findViewById(R.id.ll_Attendance);
         ll_Logout = findViewById(R.id.ll_Logout);
         ll_Exit = findViewById(R.id.ll_Exit);
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         ll_Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                redirectActivity(MainActivity.this, SettingsActivity.class);
+                redirectActivity(MainActivity.this, RegisterActivity.class);
             }
         });
     }

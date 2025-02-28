@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/layoutdrawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity">
@@ -57,12 +58,6 @@
                             android:layout_height="wrap_content"
                             android:paddingEnd="10dp"
                             android:text="User" />
-                        <RadioButton
-                            android:id="@+id/rb_other"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingEnd="10dp"
-                            android:text="Others" />
                         <RadioButton
                             android:id="@+id/rb_Admin"
                             android:layout_width="wrap_content"

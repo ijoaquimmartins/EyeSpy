@@ -32,7 +32,6 @@ public class SettingsActivity extends AppCompatActivity {
         ll_Home = findViewById(R.id.ll_Home);
         ll_Register = findViewById(R.id.ll_Register);
         ll_ShiftTimings = findViewById(R.id.ll_ShiftTimings);
-        ll_AssignShift = findViewById(R.id.ll_AssignShift);
         ll_Attendance = findViewById(R.id.ll_Attendance);
         ll_Logout = findViewById(R.id.ll_Logout);
         ll_Exit = findViewById(R.id.ll_Exit);
