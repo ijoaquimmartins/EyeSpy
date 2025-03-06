@@ -36,36 +36,11 @@
                         android:textSize="24sp"
                         android:textStyle="bold" />
                 </LinearLayout>
-                <LinearLayout
+
+                <Spinner
+                    android:id="@+id/spUserType"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <RadioGroup
-                        android:id="@+id/rg_RegType"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <RadioButton
-                            android:id="@+id/rb_SecurityGaurd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:paddingEnd="10dp"
-                            android:text="Security Gaurd" />
-                        <RadioButton
-                            android:id="@+id/rb_User"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingEnd="10dp"
-                            android:text="User" />
-                        <RadioButton
-                            android:id="@+id/rb_Admin"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingEnd="10dp"
-                            android:text="Admin" />
-                    </RadioGroup>
-                </LinearLayout>
+                    android:layout_height="48dp" />
                 <EditText
                     android:id="@+id/et_DoJ"
                     android:layout_width="match_parent"

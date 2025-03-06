@@ -19,7 +19,7 @@
         android:textStyle="bold|italic"
         android:textSize="42sp" />
     <EditText
-        android:id="@+id/et_UserName"
+        android:id="@+id/et_MobileNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -31,6 +31,20 @@
         android:layout_margin="10dp"
         android:hint="Password"
         android:inputType="textPassword" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <CheckBox
+            android:id="@+id/checkboxRemember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remembar Me"
+            android:textSize="14sp"
+            android:checked="true"
+            android:layout_marginStart="20dp"/>
+    </LinearLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
