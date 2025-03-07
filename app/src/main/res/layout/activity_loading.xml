@@ -19,6 +19,8 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
 
+
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="match_parent"

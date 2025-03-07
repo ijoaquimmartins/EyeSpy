@@ -97,7 +97,7 @@ public class Login extends AppCompatActivity {
                         String responseBody = response.body().string().trim();
                         runOnUiThread(() -> {
                             if (responseBody.equals("success")) {
-                                Intent intent = new Intent(Login.this, LoadingActivity.class);
+                                Intent intent = new Intent(Login.this, Loading.class);
                                 intent.putExtra(MOBILE_NO, stMobileno);
                                 startActivity(intent);
                                 finish();
