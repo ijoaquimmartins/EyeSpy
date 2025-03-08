@@ -44,18 +44,9 @@ public class RegisterActivity extends AppCompatActivity {
                 openDrawar(drawerLayout);
             }
         });
-        ll_Home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recreate();
-            }
-        });
-        ll_Register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                redirectActivity(RegisterActivity.this, SettingsActivity.class);
-            }
-        });
+
+        ll_Home.setOnClickListener(view -> {redirectActivity(RegisterActivity.this, MainActivity.class);});
+        ll_Register.setOnClickListener( view -> {redirectActivity(RegisterActivity.this, SettingsActivity.class);});
     }
     public static void openDrawar(DrawerLayout drawerLayout){
         drawerLayout.openDrawer(GravityCompat.START);

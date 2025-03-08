@@ -1,8 +1,10 @@
 package com.mss.eyespy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -11,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.bumptech.glide.Glide;
 
 public class Loading extends AppCompatActivity {
     private ProgressBar progressBar;
@@ -26,6 +30,9 @@ public class Loading extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         tvTask = findViewById(R.id.tvTask);
 
+        ImageView gifImageView = findViewById(R.id.gifImageView);
+        Glide.with(this).asGif().load(R.drawable.loading).into(gifImageView);
+
         startLoading();
 
     }
@@ -39,6 +46,9 @@ public class Loading extends AppCompatActivity {
 
             // Show completion message
             handler.post(() -> tvTask.setText("Completed!"));
+            Intent i = new Intent(Loading.this, MainActivity.class);
+            startActivity(i);
+            finish();
         }).start();
     }
 
