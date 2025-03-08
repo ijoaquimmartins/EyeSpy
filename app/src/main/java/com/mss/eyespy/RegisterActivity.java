@@ -45,8 +45,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        ll_Home.setOnClickListener(view -> {redirectActivity(RegisterActivity.this, MainActivity.class);});
-        ll_Register.setOnClickListener( view -> {redirectActivity(RegisterActivity.this, SettingsActivity.class);});
+        ll_Home.setOnClickListener(view -> redirectActivity(RegisterActivity.this, MainActivity.class));
+        ll_Register.setOnClickListener( view -> redirectActivity(RegisterActivity.this, SettingsActivity.class));
     }
     public static void openDrawar(DrawerLayout drawerLayout){
         drawerLayout.openDrawer(GravityCompat.START);

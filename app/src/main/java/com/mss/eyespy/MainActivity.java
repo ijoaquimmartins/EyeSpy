@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        menu.setOnClickListener(view -> {openDrawar(drawerLayout);});
-        ll_Home.setOnClickListener(view -> {recreate();});
-        ll_Register.setOnClickListener(view -> {redirectActivity(MainActivity.this, RegisterActivity.class);});
+        menu.setOnClickListener(view -> openDrawar(drawerLayout));
+        ll_Home.setOnClickListener(view -> recreate());
+        ll_Register.setOnClickListener(view -> redirectActivity(MainActivity.this, RegisterActivity.class));
 
     }
     public static void openDrawar(DrawerLayout drawerLayout){
