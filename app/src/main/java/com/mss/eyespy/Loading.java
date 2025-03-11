@@ -1,6 +1,10 @@
 package com.mss.eyespy;
 
+import static com.mss.eyespy.SharedPreferences.*;
+
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 
 import com.bumptech.glide.Glide;
 
@@ -77,7 +82,13 @@ public class Loading extends AppCompatActivity {
     }
 
     private void finalizeSetup() {
-        simulateTask(1000); // Simulate work for 1 second
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            VersionName = pInfo.versionName;
+            //   Toast.makeText(this, "Version: " + versionName, Toast.LENGTH_LONG).show();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void simulateTask(int duration) {

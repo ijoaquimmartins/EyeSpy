@@ -18,7 +18,7 @@
             android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:orientation="vertical"
                 android:scrollbars="vertical">
@@ -48,28 +48,33 @@
                     android:layout_marginTop="10dp"
                     android:drawableEnd="@drawable/ic_calendar"
                     android:hint="@string/doj"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:inputType="date"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_FirstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:hint="@string/fname"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_MiddleName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:hint="Middle Name"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_LastName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:hint="@string/lname"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_DateOfBirth"
                     android:layout_width="match_parent"
@@ -78,7 +83,8 @@
                     android:drawableEnd="@drawable/ic_calendar"
                     android:hint="@string/dob"
                     android:inputType="date"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_MobileNo"
                     android:layout_width="match_parent"
@@ -86,7 +92,8 @@
                     android:layout_marginTop="10dp"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_Email"
                     android:layout_width="match_parent"
@@ -94,7 +101,8 @@
                     android:layout_marginTop="10dp"
                     android:hint="@string/mobileno"
                     android:inputType="number"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_AadharCard"
                     android:layout_width="match_parent"
@@ -102,21 +110,24 @@
                     android:layout_marginTop="10dp"
                     android:hint="Aadhar Card No"
                     android:inputType="number"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_PAN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:hint="PAN Card"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_PassportNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:hint="Passport No"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"/>
                 <EditText
                     android:id="@+id/et_PermanentAddress"
                     android:layout_width="match_parent"
@@ -128,6 +139,7 @@
                     android:lines="5"
                     android:scrollbars="horizontal" />
                 <CheckBox
+                    android:id="@+id/cbSameAsAbove"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Same As Above" />
@@ -145,7 +157,8 @@
                     android:id="@+id/et_Password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password" />
+                    android:hint="@string/password"
+                    android:singleLine="true"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -160,7 +173,8 @@
                     <ImageView
                         android:id="@+id/iv_ProfilePhoto"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp" />
+                        android:layout_height="200dp"
+                        android:visibility="gone"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

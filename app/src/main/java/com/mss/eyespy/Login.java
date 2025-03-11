@@ -97,6 +97,7 @@ public class Login extends AppCompatActivity {
         stPassword = Base64.getEncoder().encodeToString((etPassword.getText().toString().trim()).getBytes());
 
         MobileNo = stMobileno.toString();
+
         if (!stMobileno.isEmpty() && !stPassword.isEmpty()) {
             OkHttpClient client = new OkHttpClient.Builder()
                     .connectTimeout(30, TimeUnit.SECONDS)
