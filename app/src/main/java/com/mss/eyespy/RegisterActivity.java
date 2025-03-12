@@ -1,6 +1,10 @@
 package com.mss.eyespy;
 
+import static com.mss.eyespy.GlobalClass.*;
 import static android.view.View.VISIBLE;
+import static com.mss.eyespy.GlobalClass.exitApp;
+import static com.mss.eyespy.GlobalClass.logout;
+import static com.mss.eyespy.GlobalClass.setAppVersion;
 import static com.mss.eyespy.SharedPreferences.*;
 
 import android.app.Activity;
@@ -65,17 +69,17 @@ import okhttp3.Response;
 public class RegisterActivity extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
-    ImageView menu;
+    ImageView menu, photo;
     LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_AssignShift, ll_Attendance, ll_Logout, ll_Exit ;
-    TextView tv_App_Ver_Up;
+    TextView tv_App_Ver_Up, tv_UserName;
     Spinner spUserType;
     EditText selectedEditText;
     EditText et_DoJ, et_FirstName, et_MiddleName, et_LastName, et_DateOfBirth, et_MobileNo, et_Email,
-            et_AadharCard, et_PAN, et_PassportNo, et_PermanentAddress, et_CurrentAddress, et_Password;
+            et_AadharCard, et_PAN, et_PassportNo, et_PermanentAddress, et_CurrentAddress, et_Password, et_Confirm_Password;
     CheckBox cbSameAsAbove;
     Button btn_Clickphoto, btn_Submit, btn_Cancel;
     ImageView iv_ProfilePhoto;
-    String stMassage, stPassword, uploadImage, RegisterUrl= URL+"d";
+    String stMassage, stPassword, uploadImage, stConPassword, RegisterUrl= URL+"user/save";
     private Uri imageUri;
     private static final int REQUEST_CAMERA = 100;
     private static final int REQUEST_GALLERY = 200;
@@ -88,6 +92,8 @@ public class RegisterActivity extends AppCompatActivity {
 /* Drawer Code*/
         drawerLayout = findViewById(R.id.layoutdrawer);
         menu = findViewById(R.id.main_menu);
+        photo = findViewById(R.id.iv_Photo);
+        tv_UserName = findViewById(R.id.tv_UserName);
         ll_Home = findViewById(R.id.ll_Home);
         ll_Register = findViewById(R.id.ll_Register);
         ll_ShiftTimings = findViewById(R.id.ll_ShiftTimings);
@@ -95,10 +101,15 @@ public class RegisterActivity extends AppCompatActivity {
         ll_Logout = findViewById(R.id.ll_Logout);
         ll_Exit = findViewById(R.id.ll_Exit);
         tv_App_Ver_Up = findViewById(R.id.tv_App_Ver_Up);
-        tv_App_Ver_Up.setText("Version  " + VersionName);
-        menu.setOnClickListener(view -> {openDrawar(drawerLayout);});
+
+        ll_Logout.setOnClickListener(view -> {logout(this);});
+        ll_Exit.setOnClickListener(view -> {exitApp(this);});
+        setAppVersion(this, tv_App_Ver_Up);
+
         ll_Home.setOnClickListener(view -> redirectActivity(RegisterActivity.this, MainActivity.class));
-        ll_Register.setOnClickListener( view -> redirectActivity(RegisterActivity.this, SettingsActivity.class));
+        ll_Register.setOnClickListener( view -> recreate());
+
+
 /*Drawer Code*/
 
         spUserType = findViewById(R.id.spUserType);
@@ -116,6 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
         cbSameAsAbove = findViewById(R.id.cbSameAsAbove);
         et_CurrentAddress = findViewById(R.id.et_CurrentAddress);
         et_Password = findViewById(R.id.et_Password);
+        et_Confirm_Password  = findViewById(R.id.et_Confirm_Password);
         iv_ProfilePhoto = findViewById(R.id.iv_ProfilePhoto);
         btn_Clickphoto = findViewById(R.id.btn_Clickphoto);
         btn_Submit = findViewById(R.id.btn_Submit);
@@ -141,20 +153,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
     /* Drawer Code*/
-    public static void openDrawar(DrawerLayout drawerLayout){
-        drawerLayout.openDrawer(GravityCompat.START);
-    }
-    public  static void closeDrawer(DrawerLayout drawerLayout){
-        if(drawerLayout.isDrawerOpen((GravityCompat.START))){
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-    }
-    public static  void redirectActivity(Activity activity, Class secondActivity){
-        Intent intent = new Intent(activity, secondActivity);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(intent);
-        activity.finish();
-    }
     @Override
     protected void onPause() {
         super.onPause();
@@ -257,18 +255,22 @@ public class RegisterActivity extends AppCompatActivity {
     private void SubmitForm(){
 
         stPassword = Base64.getEncoder().encodeToString(et_Password.getText().toString().trim().getBytes());
+        stConPassword = Base64.getEncoder().encodeToString(et_Confirm_Password.getText().toString().trim().getBytes());
 
-        if (areFieldsEmpty(et_DoJ, et_FirstName, et_LastName, et_DateOfBirth, et_MobileNo, et_Email, et_PermanentAddress, et_CurrentAddress, et_Password )) {
+        if (areFieldsEmpty(et_DoJ, et_FirstName, et_LastName, et_DateOfBirth, et_MobileNo, et_Email, et_PermanentAddress, et_CurrentAddress, et_Password, et_Confirm_Password )) {
             stMassage = "All (*) marked fields are mandatory";
             showAlertDialog();
             return;
         }
-
+        if(!et_Password.getText().equals(et_Confirm_Password.getText())){
+            stMassage = "Password Do not match";
+            showAlertDialog();
+            return;
+        }
         if (uploadImage == null || uploadImage.isEmpty()) {
             Toast.makeText(this, "No image selected!", Toast.LENGTH_SHORT).show();
             return;
         }
-
         File imageFile = new File(uploadImage);
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -279,28 +281,28 @@ public class RegisterActivity extends AppCompatActivity {
         RequestBody imageRequestBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
 
         MultipartBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("spUserType", String.valueOf(spUserType))
-                .addFormDataPart("DoJ", et_DoJ.getText().toString().trim())
-                .addFormDataPart("FirstName", et_FirstName.getText().toString().trim())
-                .addFormDataPart("MiddleName", et_MiddleName.getText().toString().trim())
-                .addFormDataPart("LastName", et_LastName.getText().toString().trim())
-                .addFormDataPart("DateOfBirth", et_DateOfBirth.getText().toString().trim())
-                .addFormDataPart("MobileNo", et_MobileNo.getText().toString().trim())
-                .addFormDataPart("Email", et_Email.getText().toString().trim())
-                .addFormDataPart("AadharCard", et_AadharCard.getText().toString().trim())
-                .addFormDataPart("PAN", et_PAN.getText().toString().trim())
-                .addFormDataPart("PassportNo", et_PassportNo.getText().toString().trim())
-                .addFormDataPart("PermanentAddress", et_PermanentAddress.getText().toString().trim())
-                .addFormDataPart("CurrentAddress", et_CurrentAddress.getText().toString().trim())
-                .addFormDataPart("stPassword", stPassword)
-                .addFormDataPart("profile_image", imageFile.getName(), imageRequestBody)
+                .addFormDataPart("usertype", String.valueOf(spUserType))
+                .addFormDataPart("dt_joning", et_DoJ.getText().toString().trim())
+                .addFormDataPart("first_name", et_FirstName.getText().toString().trim())
+                .addFormDataPart("middle_name", et_MiddleName.getText().toString().trim())
+                .addFormDataPart("last_name", et_LastName.getText().toString().trim())
+                .addFormDataPart("dateofbirth", et_DateOfBirth.getText().toString().trim())
+                .addFormDataPart("mobileno", et_MobileNo.getText().toString().trim())
+                .addFormDataPart("email", et_Email.getText().toString().trim())
+                .addFormDataPart("aadhar_no", et_AadharCard.getText().toString().trim())
+                .addFormDataPart("pancard_no", et_PAN.getText().toString().trim())
+                .addFormDataPart("passport_no", et_PassportNo.getText().toString().trim())
+                .addFormDataPart("permanent_address", et_PermanentAddress.getText().toString().trim())
+                .addFormDataPart("present_address", et_CurrentAddress.getText().toString().trim())
+                .addFormDataPart("password", stPassword)
+                .addFormDataPart("confirm_password", stConPassword)
+                .addFormDataPart("photo", imageFile.getName(), imageRequestBody)
                 .build();
 
         Request request = new Request.Builder()
                 .url(RegisterUrl)
                 .post(requestBody)
                 .build();
-
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -338,7 +340,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
     private boolean areFieldsEmpty(EditText... editTexts) {
         for (EditText editText : editTexts) {
             if (editText.getText().toString().trim().isEmpty()) {
@@ -348,7 +349,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return false;
     }
-
     private void showAlertDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Massage");
