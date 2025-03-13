@@ -1,5 +1,6 @@
 package com.mss.eyespy;
 
+import com.mss.eyespy.GlobalClass.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static com.mss.eyespy.GlobalClass.setAppVersion;
 import static com.mss.eyespy.SharedPreferences.*;
 
 import org.json.JSONObject;
@@ -60,15 +62,10 @@ public class Login extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_Login);
         btnCancel = findViewById(R.id.btn_Cancel);
         cbRememberMe = findViewById(R.id.checkboxRemember);
+        setAppVersion(this, tvVersion);
 
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            String versionName = pInfo.versionName;
-            tvVersion.setText("Version  " + versionName);
-         //   Toast.makeText(this, "Version: " + versionName, Toast.LENGTH_LONG).show();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        etMobileNo.setText("");
+        etPassword.setText("");
 
         autologin();
 

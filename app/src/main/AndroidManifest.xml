@@ -7,12 +7,18 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -27,14 +33,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Patrolling"
+            android:exported="false" />
+        <activity
             android:name=".Attendance"
             android:exported="false" />
         <activity
             android:name=".Loading"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".RegisterActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
@@ -49,7 +58,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

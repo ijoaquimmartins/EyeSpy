@@ -2,13 +2,7 @@ package com.mss.eyespy;
 
 import static com.mss.eyespy.GlobalClass.*;
 import static com.mss.eyespy.SharedPreferences.*;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,20 +10,21 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
-import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-public class MainActivity extends AppCompatActivity {
+public class Patrolling extends AppCompatActivity {
+
     DrawerLayout drawerLayout;
     ImageView menu, photo;
-    LinearLayout ll_Home, ll_Register, ll_Attendance, ll_Patrolling, ll_ShiftTimings, ll_Logout, ll_Exit;
+    LinearLayout ll_Home, ll_Register, ll_Attendance, ll_Patrolling, ll_ShiftTimings, ll_Logout, ll_Exit ;
     TextView tv_App_Ver_Up, tv_UserName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_patrolling);
         drawerLayout = findViewById(R.id.layoutdrawer);
         menu = findViewById(R.id.main_menu);
         photo = findViewById(R.id.iv_Photo);
@@ -49,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
         menu.setOnClickListener(view -> {openDrawer(drawerLayout);});
         tv_UserName.setText(UserFullName);
 
-        ll_Home.setOnClickListener(view -> recreate());
+        ll_Home.setOnClickListener(view -> redirectActivity(this, MainActivity.class));
         ll_Register.setOnClickListener(view -> redirectActivity(this, RegisterActivity.class));
         ll_Attendance.setOnClickListener(view -> redirectActivity(this, Attendance.class));
-        ll_Patrolling.setOnClickListener(view -> redirectActivity(this, MainActivity.class));
-
+        ll_Patrolling.setOnClickListener(view -> recreate());
     }
+
     @Override
     protected void onPause() {
         super.onPause();

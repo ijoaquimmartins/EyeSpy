@@ -39,9 +39,7 @@ public class Loading extends AppCompatActivity {
         Glide.with(this).asGif().load(R.drawable.loading).into(gifImageView);
 
         startLoading();
-
     }
-
     private void startLoading() {
         new Thread(() -> {
             runTask("Fetching data", this::fetchData);

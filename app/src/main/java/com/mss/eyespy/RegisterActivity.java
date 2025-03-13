@@ -105,10 +105,12 @@ public class RegisterActivity extends AppCompatActivity {
         ll_Logout.setOnClickListener(view -> {logout(this);});
         ll_Exit.setOnClickListener(view -> {exitApp(this);});
         setAppVersion(this, tv_App_Ver_Up);
+        menu.setOnClickListener(view -> {openDrawer(drawerLayout);});
+        tv_UserName.setText(UserFullName);
 
-        ll_Home.setOnClickListener(view -> redirectActivity(RegisterActivity.this, MainActivity.class));
         ll_Register.setOnClickListener( view -> recreate());
-
+        ll_Home.setOnClickListener(view -> redirectActivity(this, MainActivity.class));
+        ll_Attendance.setOnClickListener(view -> redirectActivity(this, Attendance.class));
 
 /*Drawer Code*/
 
