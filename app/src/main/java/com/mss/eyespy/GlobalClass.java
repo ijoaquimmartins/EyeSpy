@@ -51,7 +51,6 @@ public class GlobalClass {
         editor.clear();
         editor.commit();
 
-
         //Log.d("SharedPreferences", "Value after clear: " + sharedPreferences.getAll().size());
         Intent intent = new Intent(context, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
