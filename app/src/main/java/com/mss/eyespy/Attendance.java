@@ -58,10 +58,10 @@ import okhttp3.Response;
 
 public class Attendance extends AppCompatActivity {
 
-    DrawerLayout drawerLayout;
-    ImageView menu, photo;
-    LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_Attendance, ll_Patrolling, ll_Logout, ll_Exit ;
-    TextView tv_App_Ver_Up, tv_UserName;
+    DrawerLayout drawerLayout; //Navigation drawer
+    ImageView menu, photo; //Navigation drawer
+    LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_Attendance, ll_Patrolling, ll_Logout, ll_Exit ; //Navigation drawer
+    TextView tv_App_Ver_Up, tv_UserName; //Navigation drawer
     Button btn_MarkAttendance;
     double latitude, longitude;
     String qrData, stMassage, MarkAttendanceUrl= URL+"user/save";
@@ -77,6 +77,7 @@ public class Attendance extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
 
+        /* Navigation Drawer*/
         drawerLayout = findViewById(R.id.layoutdrawer);
         menu = findViewById(R.id.main_menu);
         photo = findViewById(R.id.iv_Photo);
@@ -104,6 +105,7 @@ public class Attendance extends AppCompatActivity {
 
         ll_Patrolling = findViewById(R.id.ll_Patrolling);
         ll_Patrolling.setOnClickListener(view -> redirectActivity(this, Patrolling.class));
+        /* Navigation Drawer*/
 
         btn_MarkAttendance = findViewById(R.id.btn_MarkAttendance);
 
@@ -123,7 +125,7 @@ public class Attendance extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        closeDrawer(drawerLayout);
+        closeDrawer(drawerLayout); //On pause close Navigation Drawer
     }
     private void loadEmployeeData() {
         // Static Data (Replace with API Data)
@@ -132,6 +134,7 @@ public class Attendance extends AppCompatActivity {
         attendanceListList.add(new AttendanceList("Paritosh (House Keeping)", "9284839598", "12/03/2025 09:30 AM", "http://100.168.10.74/photo/Malika.jpg"));
     }
 
+    //Launch, Scan and send qr data to server
     private void scanQRCode() {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Scan QR Code");
@@ -140,6 +143,7 @@ public class Attendance extends AppCompatActivity {
 
         qrCodeLauncher.launch(options);
     }
+    //Open Scanner
     private final ActivityResultLauncher<ScanOptions> qrCodeLauncher =
             registerForActivityResult(new ScanContract(), result -> {
                 if (result.getContents() != null) {
@@ -147,7 +151,7 @@ public class Attendance extends AppCompatActivity {
                     showConfirmationDialog();
                 }
             });
-
+    //Open scanner confirmation dialog
     private void showConfirmationDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Confirm Attendance")
@@ -158,6 +162,7 @@ public class Attendance extends AppCompatActivity {
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show();
     }
+    //Get GPS location
     @SuppressLint("MissingPermission")
     private void getLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -203,6 +208,8 @@ public class Attendance extends AppCompatActivity {
             }
         }
     }
+
+    //Uploade the scanned qr code data
     private void MarkAttendance(){
 
         String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);

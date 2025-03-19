@@ -26,7 +26,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d("AlarmReceiver", "Performing task for alarm ID: " + alarmId);
     }
 
-    private void clearAlarm(Context context, int alarmId) {
+    // Clear the alarm
+    public void clearAlarm(Context context, int alarmId) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);

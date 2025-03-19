@@ -45,6 +45,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
         // Load Profile Image using Glide (Add Glide dependency in build.gradle)
         Glide.with(context).load(attendanceList.getProfileUrl()).placeholder(R.drawable.default_profile).into(holder.ivProfile);
 
+        // On click call the person
         holder.itemView.setOnClickListener(v -> {
             String phoneNo = holder.tvPhone.getText().toString();
 

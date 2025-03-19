@@ -110,10 +110,10 @@ public class Loading extends AppCompatActivity {
     }
 
     private void initializeComponents() {
-    //    setAlarm();
+    //    getsetAlarm();
         simulateTask(2500); // Simulate work for 2.5 seconds
     }
-    private void setAlarm() {
+    private void getsetAlarm() {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)

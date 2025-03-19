@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +36,14 @@ public class PatrollingAdaptar extends RecyclerView.Adapter<PatrollingAdaptar.Vi
         holder.tv_TimeToScan.setText(patrollingList.getScanTimefr() + " - " + patrollingList.getScanTimeto());
         holder.tv_QrCodeId.setText(String.valueOf(patrollingList.getQrcodeId()));
 
+        //On click function for each list view
+        holder.itemView.setOnClickListener(view -> {
+            String qrid = holder.tv_QrCodeId.getText().toString();
+
+            Patrolling patrollingfun = new Patrolling(); //calling qr scan from Patrolling Activity
+            patrollingfun.scanQRCode(qrid); // String qrid is only to send id to patrolling Activity to clear the alarm from alarm manager
+
+        });
     }
 
     @Override
@@ -49,12 +56,10 @@ public class PatrollingAdaptar extends RecyclerView.Adapter<PatrollingAdaptar.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             tv_LocationName = itemView.findViewById(R.id.tv_LocationName);
             tv_LocationPoint = itemView.findViewById(R.id.tv_LocationPoint);
             tv_TimeToScan = itemView.findViewById(R.id.tv_TimeToScan);
             tv_QrCodeId = itemView.findViewById(R.id.tv_QrCodeId);
-
         }
     }
 }
