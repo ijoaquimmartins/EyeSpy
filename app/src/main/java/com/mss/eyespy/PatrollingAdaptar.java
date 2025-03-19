@@ -16,7 +16,8 @@ public class PatrollingAdaptar extends RecyclerView.Adapter<PatrollingAdaptar.Vi
     private Context context;
     private final List<PatrollingList> patrollingLists;
 
-    public PatrollingAdaptar(List<PatrollingList>patrollingLists){
+    public PatrollingAdaptar(Context context, List<PatrollingList> patrollingLists){
+        this.context = context;
         this.patrollingLists = patrollingLists;
     }
 
@@ -33,8 +34,8 @@ public class PatrollingAdaptar extends RecyclerView.Adapter<PatrollingAdaptar.Vi
 
         holder.tv_LocationName.setText(patrollingList.getColumnName());
         holder.tv_LocationPoint.setText(patrollingList.getQrLocation());
-        holder.tv_TimeToScan.setText(patrollingList.getScanTimefr()+" - " + patrollingList.getScanTimeto());
-        holder.tv_QrCodeId.setText(patrollingList.getQrcodeId());
+        holder.tv_TimeToScan.setText(patrollingList.getScanTimefr() + " - " + patrollingList.getScanTimeto());
+        holder.tv_QrCodeId.setText(String.valueOf(patrollingList.getQrcodeId()));
 
     }
 
@@ -42,9 +43,10 @@ public class PatrollingAdaptar extends RecyclerView.Adapter<PatrollingAdaptar.Vi
     public int getItemCount() {
         return patrollingLists.size();
     }
-    public static class ViewHolder extends RecyclerView.ViewHolder {
 
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_LocationName, tv_LocationPoint, tv_TimeToScan, tv_QrCodeId;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 

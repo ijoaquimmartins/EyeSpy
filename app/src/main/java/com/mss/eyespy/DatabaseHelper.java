@@ -43,8 +43,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         db.execSQL(CREATE_TABLE);
         insertInitialData(db);
+
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -64,7 +66,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " ORDER BY ABS((strftime('%H', " + SCAN_TIMEFR + ") * 3600 + strftime('%M', " + SCAN_TIMEFR + ") * 60) - " +
                 "(strftime('%H', ?) * 3600 + strftime('%M', ?) * 60)) ASC";
 
-
         Cursor cursor = db.rawQuery(query, new String[]{currentTime, currentTime});
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -82,11 +83,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return patrollingList;
     }
-
-    private void insertInitialData(SQLiteDatabase db) {
+    public void insertInitialData(SQLiteDatabase db) {
+        db.execSQL("DELETE FROM " + TABLE_NAME);
         db.execSQL("INSERT INTO " + TABLE_NAME + " (name, qrlocation, scantimefrm, scantimeto, qrcodeid, scanned) VALUES" +
                 "('Main Entrance', 'Main Entrance', '08:00', '08:15', 1001, 0)," +
-                "('Front Desk', 'Lobby', '09:00', '09:15', 1002, 0)," +
-                "('Exit Gate', 'Exit Gate', '12:00', '12:15', 1003, 0);");
+                "('Front Desk', 'Lobby', '15:00', '15:15', 1002, 0)," +
+                "('Exit Gate', 'Exit Gate', '16:00', '16:15', 1003, 0);");
+
     }
 }

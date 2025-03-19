@@ -106,7 +106,7 @@ public class Loading extends AppCompatActivity {
     private void loadAssets() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.close();
+        dbHelper.insertInitialData(db);
     }
 
     private void initializeComponents() {

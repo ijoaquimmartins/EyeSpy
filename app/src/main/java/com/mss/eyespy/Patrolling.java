@@ -80,13 +80,9 @@ public class Patrolling extends AppCompatActivity {
     }
 
     private void getTimingsList(){
-        try {
-            patrollingLists = databaseHelper.getTimings();
-            patrollingAdaptar = new PatrollingAdaptar(patrollingLists);
-            recyclerView.setAdapter(patrollingAdaptar);
-        } catch (Exception e) {
-            Log.e("DatabaseError", "Error fetching timings", e);
-        }
+        patrollingLists = databaseHelper.getTimings();
+        patrollingAdaptar = new PatrollingAdaptar(this, patrollingLists); // Pass context
+        recyclerView.setAdapter(patrollingAdaptar);
     }
 
 }
