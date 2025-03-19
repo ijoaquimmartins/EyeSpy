@@ -60,7 +60,7 @@ public class Attendance extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
     ImageView menu, photo;
-    LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_Attendance, ll_Logout, ll_Exit ;
+    LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_Attendance, ll_Patrolling, ll_Logout, ll_Exit ;
     TextView tv_App_Ver_Up, tv_UserName;
     Button btn_MarkAttendance;
     double latitude, longitude;
@@ -81,10 +81,7 @@ public class Attendance extends AppCompatActivity {
         menu = findViewById(R.id.main_menu);
         photo = findViewById(R.id.iv_Photo);
         tv_UserName = findViewById(R.id.tv_UserName);
-        ll_Home = findViewById(R.id.ll_Home);
-        ll_Register = findViewById(R.id.ll_Register);
         ll_ShiftTimings = findViewById(R.id.ll_ShiftTimings);
-        ll_Attendance = findViewById(R.id.ll_Attendance);
         ll_Logout = findViewById(R.id.ll_Logout);
         ll_Exit = findViewById(R.id.ll_Exit);
         tv_App_Ver_Up = findViewById(R.id.tv_App_Ver_Up);
@@ -95,9 +92,18 @@ public class Attendance extends AppCompatActivity {
         tv_UserName.setText(UserFullName);
 
         menu.setOnClickListener(view -> {openDrawer(drawerLayout);});
-        ll_Attendance.setOnClickListener(view -> recreate());
+
+        ll_Home = findViewById(R.id.ll_Home);
         ll_Home.setOnClickListener(view -> redirectActivity(this, MainActivity.class));
+
+        ll_Register = findViewById(R.id.ll_Register);
         ll_Register.setOnClickListener(view -> redirectActivity(this, RegisterActivity.class));
+
+        ll_Attendance = findViewById(R.id.ll_Attendance);
+        ll_Attendance.setOnClickListener(view -> recreate());
+
+        ll_Patrolling = findViewById(R.id.ll_Patrolling);
+        ll_Patrolling.setOnClickListener(view -> redirectActivity(this, Patrolling.class));
 
         btn_MarkAttendance = findViewById(R.id.btn_MarkAttendance);
 

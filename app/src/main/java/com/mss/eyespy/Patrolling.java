@@ -2,7 +2,10 @@ package com.mss.eyespy;
 
 import static com.mss.eyespy.GlobalClass.*;
 import static com.mss.eyespy.SharedPreferences.*;
+
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +16,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 public class Patrolling extends AppCompatActivity {
 
@@ -20,6 +27,10 @@ public class Patrolling extends AppCompatActivity {
     ImageView menu, photo;
     LinearLayout ll_Home, ll_Register, ll_Attendance, ll_Patrolling, ll_ShiftTimings, ll_Logout, ll_Exit ;
     TextView tv_App_Ver_Up, tv_UserName;
+    private RecyclerView recyclerView;
+    private DatabaseHelper databaseHelper;
+    private PatrollingAdaptar patrollingAdaptar;
+    private List<PatrollingList> patrollingLists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +59,11 @@ public class Patrolling extends AppCompatActivity {
         ll_Register.setOnClickListener(view -> redirectActivity(this, RegisterActivity.class));
         ll_Attendance.setOnClickListener(view -> redirectActivity(this, Attendance.class));
         ll_Patrolling.setOnClickListener(view -> recreate());
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        databaseHelper = new DatabaseHelper(this);
+        getTimingsList();
     }
 
     @Override
@@ -55,4 +71,22 @@ public class Patrolling extends AppCompatActivity {
         super.onPause();
         closeDrawer(drawerLayout);
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null) {
+            databaseHelper.close();
+        }
+    }
+
+    private void getTimingsList(){
+        try {
+            patrollingLists = databaseHelper.getTimings();
+            patrollingAdaptar = new PatrollingAdaptar(patrollingLists);
+            recyclerView.setAdapter(patrollingAdaptar);
+        } catch (Exception e) {
+            Log.e("DatabaseError", "Error fetching timings", e);
+        }
+    }
+
 }

@@ -34,10 +34,7 @@ public class MainActivity extends AppCompatActivity {
         menu = findViewById(R.id.main_menu);
         photo = findViewById(R.id.iv_Photo);
         tv_UserName = findViewById(R.id.tv_UserName);
-        ll_Home = findViewById(R.id.ll_Home);
-        ll_Register = findViewById(R.id.ll_Register);
-        ll_Attendance = findViewById(R.id.ll_Attendance);
-        ll_Patrolling = findViewById(R.id.ll_Patrolling);
+
         ll_ShiftTimings = findViewById(R.id.ll_ShiftTimings);
         ll_Logout = findViewById(R.id.ll_Logout);
         ll_Exit = findViewById(R.id.ll_Exit);
@@ -49,10 +46,17 @@ public class MainActivity extends AppCompatActivity {
         menu.setOnClickListener(view -> {openDrawer(drawerLayout);});
         tv_UserName.setText(UserFullName);
 
+        ll_Home = findViewById(R.id.ll_Home);
         ll_Home.setOnClickListener(view -> recreate());
+
+        ll_Register = findViewById(R.id.ll_Register);
         ll_Register.setOnClickListener(view -> redirectActivity(this, RegisterActivity.class));
+
+        ll_Attendance = findViewById(R.id.ll_Attendance);
         ll_Attendance.setOnClickListener(view -> redirectActivity(this, Attendance.class));
-        ll_Patrolling.setOnClickListener(view -> redirectActivity(this, MainActivity.class));
+
+        ll_Patrolling = findViewById(R.id.ll_Patrolling);
+        ll_Patrolling.setOnClickListener(view -> redirectActivity(this, Patrolling.class));
 
     }
     @Override

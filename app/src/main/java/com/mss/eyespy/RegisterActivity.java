@@ -70,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
     ImageView menu, photo;
-    LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_AssignShift, ll_Attendance, ll_Logout, ll_Exit ;
+    LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_AssignShift, ll_Attendance, ll_Patrolling, ll_Logout, ll_Exit ;
     TextView tv_App_Ver_Up, tv_UserName;
     Spinner spUserType;
     EditText selectedEditText;
@@ -94,10 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
         menu = findViewById(R.id.main_menu);
         photo = findViewById(R.id.iv_Photo);
         tv_UserName = findViewById(R.id.tv_UserName);
-        ll_Home = findViewById(R.id.ll_Home);
-        ll_Register = findViewById(R.id.ll_Register);
         ll_ShiftTimings = findViewById(R.id.ll_ShiftTimings);
-        ll_Attendance = findViewById(R.id.ll_Attendance);
         ll_Logout = findViewById(R.id.ll_Logout);
         ll_Exit = findViewById(R.id.ll_Exit);
         tv_App_Ver_Up = findViewById(R.id.tv_App_Ver_Up);
@@ -108,9 +105,17 @@ public class RegisterActivity extends AppCompatActivity {
         menu.setOnClickListener(view -> {openDrawer(drawerLayout);});
         tv_UserName.setText(UserFullName);
 
-        ll_Register.setOnClickListener( view -> recreate());
+        ll_Home = findViewById(R.id.ll_Home);
         ll_Home.setOnClickListener(view -> redirectActivity(this, MainActivity.class));
+
+        ll_Register = findViewById(R.id.ll_Register);
+        ll_Register.setOnClickListener(view -> recreate());
+
+        ll_Attendance = findViewById(R.id.ll_Attendance);
         ll_Attendance.setOnClickListener(view -> redirectActivity(this, Attendance.class));
+
+        ll_Patrolling = findViewById(R.id.ll_Patrolling);
+        ll_Patrolling.setOnClickListener(view -> redirectActivity(this, Patrolling.class));;
 
 /*Drawer Code*/
 

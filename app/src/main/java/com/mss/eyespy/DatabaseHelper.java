@@ -3,22 +3,22 @@ package com.mss.eyespy;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Name & Version
     private static final String DATABASE_NAME = "EyeSpyDb.db";
     private static final int DATABASE_VERSION = 1;
-
     // Table Name
     private static final String TABLE_NAME = "qrscan";
-
     // Column Names
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
@@ -28,15 +28,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String QRCODE_ID = "qrcodeid";
     private static final String SCANNED = "scanned";
 
-
     // Create Table Query
     private static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_NAME + " TEXT, " +
                     QR_LOCATION + " TEXT, " +
-                    SCAN_TIMEFR + " NUMERIC, " +
-                    SCAN_TIMETO + " NUMERIC, " +
+                    SCAN_TIMEFR + " TEXT, " +
+                    SCAN_TIMETO + " TEXT, " +
                     QRCODE_ID + " INTEGER, " +
                     SCANNED + " INTEGER)";
     public DatabaseHelper(Context context) {
@@ -45,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE);
+        insertInitialData(db);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -52,49 +52,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // **INSERT DATA**
-    public boolean insertTimings(String name, String qrlocation, String scantimefrm, String scantimeto, String qrcodeid, String scanned) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, name);
-        values.put(QR_LOCATION, qrlocation);
-        values.put(SCAN_TIMEFR, scantimefrm);
-        values.put(SCAN_TIMETO, scantimeto);
-        values.put(QRCODE_ID, qrcodeid);
-        values.put(SCANNED, scanned);
-        long result = db.insert(TABLE_NAME, null, values);
-        db.close();
-        return result != -1; // Returns true if inserted, false otherwise
-    }
-
-    // **UPDATE DATA**
-    public boolean updateTimings(int id, String scanned) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(SCANNED, scanned);
-        int result = db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
-        db.close();
-        return result > 0; // Returns true if updated, false otherwise
-    }
-
-    // **DELETE DATA**
-    public boolean deleteTimings(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int result = db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
-        db.close();
-        return result > 0; // Returns true if deleted, false otherwise
-    }
-
-    // **FETCH DATA**
-    public Cursor getTimings() {
+    public List<PatrollingList> getTimings() {
+        List<PatrollingList> patrollingList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String currentTime = sdf.format(new Date());
 
         String query = "SELECT * FROM " + TABLE_NAME +
-                " ORDER BY ABS(strftime('%H:%M', time_column) - strftime('%H:%M', ?)) ASC";
+                " WHERE " + SCANNED + " = 0 " +
+                " ORDER BY ABS((strftime('%H', " + SCAN_TIMEFR + ") * 3600 + strftime('%M', " + SCAN_TIMEFR + ") * 60) - " +
+                "(strftime('%H', ?) * 3600 + strftime('%M', ?) * 60)) ASC";
 
-        return db.rawQuery(query, new String[]{currentTime});
+
+        Cursor cursor = db.rawQuery(query, new String[]{currentTime, currentTime});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int columnId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+                String columnName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME));
+                String qrLocation = cursor.getString(cursor.getColumnIndexOrThrow(QR_LOCATION));
+                String scanTimefr = cursor.getString(cursor.getColumnIndexOrThrow(SCAN_TIMEFR));
+                String scanTimeto = cursor.getString(cursor.getColumnIndexOrThrow(SCAN_TIMETO));
+                int qrcodeId = cursor.getInt(cursor.getColumnIndexOrThrow(QRCODE_ID));
+
+                patrollingList.add(new PatrollingList(columnId, columnName, qrLocation, scanTimefr, scanTimeto, qrcodeId));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return patrollingList;
+    }
+
+    private void insertInitialData(SQLiteDatabase db) {
+        db.execSQL("INSERT INTO " + TABLE_NAME + " (name, qrlocation, scantimefrm, scantimeto, qrcodeid, scanned) VALUES" +
+                "('Main Entrance', 'Main Entrance', '08:00', '08:15', 1001, 0)," +
+                "('Front Desk', 'Lobby', '09:00', '09:15', 1002, 0)," +
+                "('Exit Gate', 'Exit Gate', '12:00', '12:15', 1003, 0);");
     }
 }

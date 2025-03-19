@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -103,11 +104,13 @@ public class Loading extends AppCompatActivity {
     }
 
     private void loadAssets() {
-        simulateTask(1500); // Simulate work for 1.5 seconds
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.close();
     }
 
     private void initializeComponents() {
-        setAlarm();
+    //    setAlarm();
         simulateTask(2500); // Simulate work for 2.5 seconds
     }
     private void setAlarm() {
