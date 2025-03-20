@@ -19,7 +19,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     // Table Name
     private static final String TABLE_NAME = "qrscan";
+    private static final String TABLE_QR_SCANS = "qr_scans";
     // Column Names
+
+    //for table qrscan
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
     private static final String QR_LOCATION = "qrlocation";
@@ -27,6 +30,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SCAN_TIMETO = "scantimeto";
     private static final String QRCODE_ID = "qrcodeid";
     private static final String SCANNED = "scanned";
+
+    // for table qr_scans
+    private static final String COLUMNID = "id";
+    private static final String COLUMN_QRDATA = "qrdata";
+    private static final String COLUMN_LATITUDE = "latitude";
+    private static final String COLUMN_LONGITUDE = "longitude";
+    private static final String COLUMN_SYNCED = "synced";
 
     // Create Table Query
     private static final String CREATE_TABLE =

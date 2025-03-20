@@ -219,7 +219,6 @@ public class Attendance extends AppCompatActivity {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .build();
-
         FormBody formBody = new FormBody.Builder()
                 .add("qrData", qrData)
                 .add("location", String.valueOf(latitude +", "+ longitude))
