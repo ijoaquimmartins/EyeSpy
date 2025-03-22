@@ -54,8 +54,7 @@ public class Loading extends AppCompatActivity {
     private TextView tvTask;
     private int progress = 0;
     private Handler handler = new Handler(Looper.getMainLooper());
-    private AlarmManager alarmManager;
-    private String patrolingURL, stMassage, time;;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +63,6 @@ public class Loading extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
         tvTask = findViewById(R.id.tvTask);
-
-        ImageView gifImageView = findViewById(R.id.gifImageView);
-        Glide.with(this).asGif().load(R.drawable.loading).into(gifImageView);
-
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
         startLoading();
     }
     private void startLoading() {
@@ -104,103 +97,10 @@ public class Loading extends AppCompatActivity {
     }
 
     private void loadAssets() {
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        dbHelper.insertInitialData(db);
+        simulateTask(2000);
     }
-
     private void initializeComponents() {
-    //    getsetAlarm();
         simulateTask(2500); // Simulate work for 2.5 seconds
-    }
-    private void getsetAlarm() {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .build();
-
-        FormBody formBody = new FormBody.Builder()
-                .add("userid", UserTableId)
-                .build();
-
-        Request request = new Request.Builder()
-                .url(patrolingURL)
-                .post(formBody)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                stMassage = "Error fetching data. Please restart the app.";
-                runOnUiThread(() -> showAlertDialog());
-            }
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    String responseBody = response.body().string().trim();
-                    try {
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-                        String error = jsonResponse.optString("error");
-                        String msg = jsonResponse.optString("msg");
-
-                        if (!error.isEmpty()) {
-                            Log.e("SetAlarm", "Server Error: " + error);
-                            return;
-                        }
-                        JSONArray alarms = jsonResponse.getJSONArray("alarms");
-                        for (int i = 0; i < alarms.length(); i++) {
-                            JSONObject alarm = alarms.getJSONObject(i);
-                            int alarmId = alarm.getInt("id");
-                            String time = alarm.getString("time"); // Expected format: "yyyy-MM-dd HH:mm:ss"
-                            setExactAlarm(alarmId, time);
-
-                        }
-                    } catch (Exception e) {
-                        Log.e("SetAlarm", "Error parsing JSON", e);
-                    }
-                }
-            }
-        });
-    }
-    private void setExactAlarm(int alarmId, String alarmTime) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Android 12+
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            if (!alarmManager.canScheduleExactAlarms()) {
-                requestExactAlarmPermission();
-                return;
-            }
-        }
-        try {
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-            Date date = sdf.parse(alarmTime);
-
-            if (date == null) {
-                Log.e("SetAlarm", "Invalid time format: " + alarmTime);
-                return;
-            }
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-
-            Intent intent = new Intent(this, AlarmReceiver.class);
-            intent.putExtra("alarm_id", alarmId);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-            Log.d("SetAlarm", "Alarm " + alarmId + " set for " + alarmTime);
-        } catch (Exception e) {
-            Log.e("SetAlarm", "Error setting alarm", e);
-        }
-    }
-    private void requestExactAlarmPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-            startActivity(intent);
-        }
     }
     private void finalizeSetup() {
         try {
@@ -211,32 +111,11 @@ public class Loading extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
     private void simulateTask(int duration) {
         try {
             Thread.sleep(duration);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private void showAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Massage");
-        builder.setMessage(stMassage);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                dialog.dismiss();
-                Intent i = new Intent(Loading.this, Login.class);
-                startActivity(i);
-                finish();
-
-            }
-        });
-        builder.setCancelable(false);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
 }

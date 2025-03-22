@@ -15,4 +15,5 @@
     <string name="currentadd">Current Address<font color="red"> *</font></string>
     <string name="username">User Name<font color="red"> *</font></string>
     <string name="password">Password<font color="red"> *</font></string>
+    <string name="conpassword">Confirm Password<font color="red"> *</font></string>
 </resources>

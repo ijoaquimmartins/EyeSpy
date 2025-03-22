@@ -3,102 +3,113 @@ package com.mss.eyespy;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    // Database Name & Version
-    private static final String DATABASE_NAME = "EyeSpyDb.db";
+
+    private static final String DATABASE_NAME = "eyespy.db";
     private static final int DATABASE_VERSION = 1;
-    // Table Name
-    private static final String TABLE_NAME = "qrscan";
-    private static final String TABLE_QR_SCANS = "qr_scans";
-    // Column Names
 
-    //for table qrscan
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_NAME = "name";
-    private static final String QR_LOCATION = "qrlocation";
-    private static final String SCAN_TIMEFR = "scantimefrm";
-    private static final String SCAN_TIMETO = "scantimeto";
-    private static final String QRCODE_ID = "qrcodeid";
-    private static final String SCANNED = "scanned";
+    // Table 1: Users
+    private static final String TABLE_USERS = "users";
+    private static final String COLUMN_USER_ID = "id";
+    private static final String COLUMN_MOBILE_NO = "mobileno";
+    private static final String COLUMN_USER_UNIQUE_ID = "userid";
+    private static final String COLUMN_FIRST_NAME = "first_name";
+    private static final String COLUMN_MIDDLE_NAME = "middle_name";
+    private static final String COLUMN_LAST_NAME = "last_name";
+    private static final String COLUMN_USER_ACCESS = "user_access";
+    private static final String COLUMN_PROFILE_PHOTO = "profilephoto";
+    private static final String COLUMN_EDITED_DATETIME = "editeddatetime";
 
-    // for table qr_scans
-    private static final String COLUMNID = "id";
-    private static final String COLUMN_QRDATA = "qrdata";
-    private static final String COLUMN_LATITUDE = "latitude";
-    private static final String COLUMN_LONGITUDE = "longitude";
-    private static final String COLUMN_SYNCED = "synced";
+    // Table 2: Scanned QR
+    private static final String TABLE_SCANNED_QR = "scanned_qr";
+    private static final String COLUMN_QR_ID = "id";
+    private static final String COLUMN_QR_CODE = "qr_code";
+    private static final String COLUMN_QR_NAME = "name";
+    private static final String COLUMN_QR_LOCATION = "location";
+    private static final String COLUMN_QR_DATETIME = "datetime";
 
-    // Create Table Query
-    private static final String CREATE_TABLE =
-            "CREATE TABLE " + TABLE_NAME + " (" +
-                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_NAME + " TEXT, " +
-                    QR_LOCATION + " TEXT, " +
-                    SCAN_TIMEFR + " TEXT, " +
-                    SCAN_TIMETO + " TEXT, " +
-                    QRCODE_ID + " INTEGER, " +
-                    SCANNED + " INTEGER)";
+    // Create Table Queries
+    private static final String CREATE_TABLE_USERS =
+            "CREATE TABLE " + TABLE_USERS + " ("
+                    + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COLUMN_MOBILE_NO + " TEXT, "
+                    + COLUMN_USER_UNIQUE_ID + " TEXT, "
+                    + COLUMN_FIRST_NAME + " TEXT, "
+                    + COLUMN_MIDDLE_NAME + " TEXT, "
+                    + COLUMN_LAST_NAME + " TEXT, "
+                    + COLUMN_USER_ACCESS + " TEXT, "
+                    + COLUMN_PROFILE_PHOTO + " BLOB, "
+                    + COLUMN_EDITED_DATETIME + " TEXT DEFAULT CURRENT_TIMESTAMP"
+                    + ");";
+
+    private static final String CREATE_TABLE_SCANNED_QR =
+            "CREATE TABLE " + TABLE_SCANNED_QR + " ("
+                    + COLUMN_QR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COLUMN_QR_CODE + " TEXT, "
+                    + COLUMN_QR_NAME + " TEXT, "
+                    + COLUMN_QR_LOCATION + " TEXT, "
+                    + COLUMN_QR_DATETIME + " TEXT DEFAULT CURRENT_TIMESTAMP"
+                    + ");";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        db.execSQL(CREATE_TABLE);
-        insertInitialData(db);
-
+        db.execSQL(CREATE_TABLE_USERS);
+        db.execSQL(CREATE_TABLE_SCANNED_QR);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCANNED_QR);
         onCreate(db);
     }
 
-    public List<PatrollingList> getTimings() {
-        List<PatrollingList> patrollingList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
+    // Insert User
+    public boolean insertUser(String mobileno, String userid, String firstName, String middleName,
+                              String lastName, String userAccess, byte[] profilePhoto) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_MOBILE_NO, mobileno);
+        values.put(COLUMN_USER_UNIQUE_ID, userid);
+        values.put(COLUMN_FIRST_NAME, firstName);
+        values.put(COLUMN_MIDDLE_NAME, middleName);
+        values.put(COLUMN_LAST_NAME, lastName);
+        values.put(COLUMN_USER_ACCESS, userAccess);
+        values.put(COLUMN_PROFILE_PHOTO, profilePhoto);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String currentTime = sdf.format(new Date());
-
-        String query = "SELECT * FROM " + TABLE_NAME +
-                " WHERE " + SCANNED + " = 0 " +
-                " ORDER BY ABS((strftime('%H', " + SCAN_TIMEFR + ") * 3600 + strftime('%M', " + SCAN_TIMEFR + ") * 60) - " +
-                "(strftime('%H', ?) * 3600 + strftime('%M', ?) * 60)) ASC";
-
-        Cursor cursor = db.rawQuery(query, new String[]{currentTime, currentTime});
-
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                int columnId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
-                String columnName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME));
-                String qrLocation = cursor.getString(cursor.getColumnIndexOrThrow(QR_LOCATION));
-                String scanTimefr = cursor.getString(cursor.getColumnIndexOrThrow(SCAN_TIMEFR));
-                String scanTimeto = cursor.getString(cursor.getColumnIndexOrThrow(SCAN_TIMETO));
-                int qrcodeId = cursor.getInt(cursor.getColumnIndexOrThrow(QRCODE_ID));
-
-                patrollingList.add(new PatrollingList(columnId, columnName, qrLocation, scanTimefr, scanTimeto, qrcodeId));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        return patrollingList;
+        long result = db.insert(TABLE_USERS, null, values);
+        return result != -1;
     }
-    public void insertInitialData(SQLiteDatabase db) {
-        db.execSQL("DELETE FROM " + TABLE_NAME);
-        db.execSQL("INSERT INTO " + TABLE_NAME + " (name, qrlocation, scantimefrm, scantimeto, qrcodeid, scanned) VALUES" +
-                "('Main Entrance', 'Main Entrance', '08:00', '08:15', 1001, 0)," +
-                "('Front Desk', 'Lobby', '15:00', '15:15', 1002, 0)," +
-                "('Exit Gate', 'Exit Gate', '16:00', '16:15', 1003, 0);");
 
+    // Insert Scanned QR
+    public boolean insertScannedQR(String qrCode, String name, String location) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_QR_CODE, qrCode);
+        values.put(COLUMN_QR_NAME, name);
+        values.put(COLUMN_QR_LOCATION, location);
+
+        long result = db.insert(TABLE_SCANNED_QR, null, values);
+        return result != -1;
+    }
+
+    // Retrieve All Users
+    public Cursor getAllUsers() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_USERS, null);
+    }
+
+    // Retrieve All QR Scans
+    public Cursor getAllScannedQR() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_SCANNED_QR, null);
     }
 }

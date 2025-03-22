@@ -86,7 +86,7 @@
                     android:scrollbars="horizontal"
                     android:singleLine="true"/>
                 <EditText
-                    android:id="@+id/et_MobileNo"
+                    android:id="@+id/et_Email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -95,7 +95,7 @@
                     android:scrollbars="horizontal"
                     android:singleLine="true"/>
                 <EditText
-                    android:id="@+id/et_Email"
+                    android:id="@+id/et_MobileNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -163,7 +163,7 @@
                     android:id="@+id/et_Confirm_Password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password"
+                    android:hint="@string/conpassword"
                     android:singleLine="true"/>
                 <LinearLayout
                     android:layout_width="match_parent"

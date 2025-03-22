@@ -95,7 +95,6 @@ public class Patrolling extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         databaseHelper = new DatabaseHelper(this);
-        getTimingsList();
 
 
     }
@@ -115,12 +114,6 @@ public class Patrolling extends AppCompatActivity {
         if (databaseHelper != null) {
             databaseHelper.close();
         }
-    }
-    //getting timings from local data i.e. sqlite
-    private void getTimingsList(){
-        patrollingLists = databaseHelper.getTimings();
-        patrollingAdaptar = new PatrollingAdaptar(this, patrollingLists); // Pass context
-        recyclerView.setAdapter(patrollingAdaptar);
     }
 
     //Launch, Scan and send qr data to server

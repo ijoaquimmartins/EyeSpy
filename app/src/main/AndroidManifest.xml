@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -33,6 +33,12 @@
         android:theme="@style/Theme.EyeSpy"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".VisitorAdd"
+            android:exported="false" />
+        <activity
+            android:name=".Visitor"
+            android:exported="false" />
         <activity
             android:name=".Patrolling"
             android:exported="false" />

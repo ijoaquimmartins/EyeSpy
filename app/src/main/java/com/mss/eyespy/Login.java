@@ -1,5 +1,6 @@
 package com.mss.eyespy;
 
+import com.mss.eyespy.DatabaseHelper.*;
 import com.mss.eyespy.GlobalClass.*;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,11 +47,13 @@ public class Login extends AppCompatActivity {
     TextView tvVersion;
     Button btnLogin, btnCancel;
     CheckBox cbRememberMe;
-    public String mobileno, password, stMassage,stMobileno, stPassword;
+    public String mobileno, password, stMassage, stMobileno, stPassword;
     public static final String SHARED_PREFS = "sharedprefs";
     public static final String MOBILE_NO = "mobileno";
     public static final String PASSWORD = "password";
     public static final String USER_NAME = "username";
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +67,8 @@ public class Login extends AppCompatActivity {
         cbRememberMe = findViewById(R.id.checkboxRemember);
         setAppVersion(this, tvVersion);
 
-        etMobileNo.setText("");
-        etPassword.setText("");
+        etMobileNo.setText(" ");
+        etPassword.setText(" ");
 
         autologin();
 
@@ -127,23 +130,30 @@ public class Login extends AppCompatActivity {
                             JSONObject jsonResponse = new JSONObject(responseBody);
                             String error = jsonResponse.optString("error", "");
                             String msg = jsonResponse.optString("msg", ""); // Get 'msg' from response
-                            String firstName = jsonResponse.optString("first_name", "Unknown");
-                            String userType = jsonResponse.optString("usertype", "USER");
-                            String userAccess = jsonResponse.optString("user_access", "");
+                            String mobileno = jsonResponse.optString("mobileno", "");
+                            String userid = jsonResponse.optString("userid", "");
+                            String first_name = jsonResponse.optString("first_name", "");
+                            String middle_name = jsonResponse.optString("middle_name", "");
+                            String last_name = jsonResponse.optString("last_name", "");
+                            String user_access = jsonResponse.optString("user_access", "");
+                            String profilephoto = jsonResponse.optString("profilephoto", "");
+                            String editeddatetime = jsonResponse.optString("editeddatetime", "");
+
 
                             runOnUiThread(() -> {
                                 if (msg.equalsIgnoreCase("success")) {
                                     Intent intent = new Intent(Login.this, Loading.class);
-                                    intent.putExtra("MOBILE_NO", stMobileno);
-                                    intent.putExtra("FIRST_NAME", firstName);
-                                    intent.putExtra("USER_TYPE", userType);
-                                    intent.putExtra("USER_ACCESS", userAccess);
                                     startActivity(intent);
                                     finish();
                                 } else if (msg.equalsIgnoreCase("failed")) {
                                     stMassage = error;
                                     showAlertDialog();
-                                }else {
+                                }else if (msg.equalsIgnoreCase("update")) {
+                                //    boolean updateuserdata = dbHelper.insertUser(
+                                //            mobileno, userid, first_name, middle_name, last_name, user_access, profilephoto, editeddatetime
+                                //    );
+                                }
+                                else {
                                     stMassage = msg;
                                     showAlertDialog();
                                 }

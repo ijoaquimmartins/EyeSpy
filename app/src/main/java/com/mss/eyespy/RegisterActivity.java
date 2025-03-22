@@ -19,8 +19,13 @@ import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -44,15 +49,22 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import android.Manifest;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,10 +91,12 @@ public class RegisterActivity extends AppCompatActivity {
     CheckBox cbSameAsAbove;
     Button btn_Clickphoto, btn_Submit, btn_Cancel;
     ImageView iv_ProfilePhoto;
-    String stMassage, stPassword, uploadImage, stConPassword, RegisterUrl= URL+"user/save";
+    String stMassage, selectedValue, stPassword, uploadImage, stConPassword, stUserType, RegisterUrl= URL+"user/save", getUserTypeURL=URL+"fetchUserType";
     private Uri imageUri;
     private static final int REQUEST_CAMERA = 100;
     private static final int REQUEST_GALLERY = 200;
+    List<String> labels = new ArrayList<>();
+    private Map<String, String> labelValueMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +171,20 @@ public class RegisterActivity extends AppCompatActivity {
         });
         btn_Submit.setOnClickListener(view -> SubmitForm());
 
+        getUserType();
 
+        spUserType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedLabel = parent.getItemAtPosition(position).toString();
+                selectedValue = labelValueMap.get(selectedLabel);
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
     /* Drawer Code*/
     @Override
@@ -166,6 +193,53 @@ public class RegisterActivity extends AppCompatActivity {
         closeDrawer(drawerLayout);
     }
     /* Drawer Code*/
+
+    private  void getUserType(){
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(getUserTypeURL)
+                    .get()
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseData = response.body().string();
+                    List<String> labels = new ArrayList<>();
+
+                    try {
+                        JSONArray jsonArray = new JSONArray(responseData);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject obj = jsonArray.getJSONObject(i);
+                            String label = obj.getString("label");
+                            String value = obj.getString("value");
+
+                            labels.add(label);
+                            labelValueMap.put(label, value); // Now accessible globally
+                        }
+
+                        mainHandler.post(() -> {
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(RegisterActivity.this,
+                                    android.R.layout.simple_spinner_item, labels);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spUserType.setAdapter(adapter);
+                        });
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("Request failed: " + response.code());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
 
     private void showDatePicker(EditText editText) {
         selectedEditText = editText;
@@ -263,14 +337,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         stPassword = Base64.getEncoder().encodeToString(et_Password.getText().toString().trim().getBytes());
         stConPassword = Base64.getEncoder().encodeToString(et_Confirm_Password.getText().toString().trim().getBytes());
+    //    stUserType  = Base64.getEncoder().encodeToString(selectedValue.trim().getBytes());
 
         if (areFieldsEmpty(et_DoJ, et_FirstName, et_LastName, et_DateOfBirth, et_MobileNo, et_Email, et_PermanentAddress, et_CurrentAddress, et_Password, et_Confirm_Password )) {
             stMassage = "All (*) marked fields are mandatory";
             showAlertDialog();
             return;
         }
-        if(!et_Password.getText().equals(et_Confirm_Password.getText())){
-            stMassage = "Password Do not match";
+        if (!et_Password.getText().toString().equals(et_Confirm_Password.getText().toString())) {
+            stMassage = "Passwords do not match";
             showAlertDialog();
             return;
         }
@@ -288,7 +363,7 @@ public class RegisterActivity extends AppCompatActivity {
         RequestBody imageRequestBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
 
         MultipartBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("usertype", String.valueOf(spUserType))
+                .addFormDataPart("usertype", selectedValue)
                 .addFormDataPart("dt_joning", et_DoJ.getText().toString().trim())
                 .addFormDataPart("first_name", et_FirstName.getText().toString().trim())
                 .addFormDataPart("middle_name", et_MiddleName.getText().toString().trim())
@@ -302,7 +377,9 @@ public class RegisterActivity extends AppCompatActivity {
                 .addFormDataPart("permanent_address", et_PermanentAddress.getText().toString().trim())
                 .addFormDataPart("present_address", et_CurrentAddress.getText().toString().trim())
                 .addFormDataPart("password", stPassword)
-                .addFormDataPart("confirm_password", stConPassword)
+                .addFormDataPart("password_confirmation", stConPassword)
+                .addFormDataPart("formtype", "MOBILEADD")
+                .addFormDataPart("status", "0")
                 .addFormDataPart("photo", imageFile.getName(), imageRequestBody)
                 .build();
 
@@ -327,13 +404,13 @@ public class RegisterActivity extends AppCompatActivity {
                         String msg = jsonResponse.optString("msg", "");
                     runOnUiThread(() -> {
                         if(msg.equalsIgnoreCase("success")){
-                            stMassage = msg;
+                            stMassage = responseBody;
                             showAlertDialog();
                         } else if (error.equalsIgnoreCase("failed")) {
-                            stMassage = error;
+                            stMassage = responseBody;
                             showAlertDialog();
                         }else{
-                            stMassage = msg;
+                            stMassage = responseBody;
                             showAlertDialog();
                         }
                     });

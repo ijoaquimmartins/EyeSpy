@@ -14,7 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 public class GlobalClass {
 
-    private static final String SHARED_PREFS = "user_prefs";
+    public static final String SHARED_PREFS = "sharedprefs";
 
     // Open Navigation Drawer
     public static void openDrawer(DrawerLayout drawerLayout) {

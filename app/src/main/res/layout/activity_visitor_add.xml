@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VisitorAdd">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ADD VISITOR"
+            android:gravity="center_horizontal"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                android:layout_margin="5dp">
+
+                <Spinner
+                    android:id="@+id/spn_EntryLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_margin="5dp" />
+                <EditText
+                    android:id="@+id/et_VisitorFullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"
+                    android:hint="Visitor Full Name"
+                    android:layout_margin="5dp"/>
+                <EditText
+                    android:id="@+id/et_VisitorMobileNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"
+                    android:hint="Visitor Mobile No"
+                    android:layout_margin="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:layout_margin="5dp">
+                    <Button
+                        android:id="@+id/btn_VisitorPhoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_camera"
+                        android:text="Visitor Photo"
+                        android:layout_margin="5dp"/>
+                    <ImageView
+                        android:id="@+id/iv_VisitorPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:visibility="gone"
+                        android:layout_margin="5dp"/>
+                </LinearLayout>
+                <ToggleButton
+                    android:id="@+id/tb_Vehicle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="With Vehicle"
+                    android:textOn="Without Vehicle"
+                    android:layout_margin="5dp"/>
+                <EditText
+                    android:id="@+id/et_VisitorVehicleNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"
+                    android:hint="Visitor Vehicle No"
+                    android:visibility="gone"
+                    android:layout_margin="5dp"/>
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_margin="5dp">
+                    <Button
+                        android:id="@+id/btn_VisitorVehiclePhoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_camera"
+                        android:text="Vehicle Photo"
+                        android:layout_margin="5dp"/>
+                    <ImageView
+                        android:id="@+id/iv_VisitorVehiclePhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:visibility="gone"
+                        android:layout_margin="5dp"/>
+                </LinearLayout>
+                <Spinner
+                    android:id="@+id/sp_Visiting_To"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_margin="5dp"/>
+                <EditText
+                    android:id="@+id/et_Visiting_To"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"
+                    android:visibility="gone"
+                    android:hint="Visiting To"
+                    android:layout_margin="5dp"/>
+                <EditText
+                    android:id="@+id/et_Purpose"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:hint="Visiting Purpose"
+                    android:gravity="start"
+                    android:background="@drawable/edittext_shape"
+                    android:layout_margin="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_margin="10dp">
+                    <Button
+                        android:id="@+id/btn_Add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/green"
+                        android:text="@string/submit"
+                        android:layout_margin="10dp"/>
+                    <Button
+                        android:id="@+id/btn_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/gray"
+                        android:text="@string/cancel"
+                        android:layout_margin="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

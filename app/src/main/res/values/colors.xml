@@ -5,4 +5,7 @@
 
     <color name="levendar">#9999ff</color>
 
+    <color name="green">#006600</color>
+    <color name="gray">#c0c0c0</color>
+
 </resources>
