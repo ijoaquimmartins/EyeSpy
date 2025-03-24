@@ -410,7 +410,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if(msg.equalsIgnoreCase("success")){
                             stMassage = responseBody;
                             showAlertDialog();
-
+                            recreate();
                         } else if (error.equalsIgnoreCase("failed")) {
                             stMassage = responseBody;
                             showAlertDialog();

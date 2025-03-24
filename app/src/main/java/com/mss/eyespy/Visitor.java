@@ -1,5 +1,6 @@
 package com.mss.eyespy;
 
+import static com.mss.eyespy.GlobalClass.*;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.mss.eyespy.GlobalClass.closeDrawer;
