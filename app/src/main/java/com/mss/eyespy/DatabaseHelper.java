@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_LAST_NAME = "last_name";
     private static final String COLUMN_USER_ACCESS = "user_access";
     private static final String COLUMN_PROFILE_PHOTO = "profilephoto";
-    private static final String COLUMN_EDITED_DATETIME = "editeddatetime";
+    public static final String COLUMN_EDITED_DATETIME = "editeddatetime";
 
     // Table 2: Scanned QR
     private static final String TABLE_SCANNED_QR = "scanned_qr";
@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + COLUMN_LAST_NAME + " TEXT, "
                     + COLUMN_USER_ACCESS + " TEXT, "
                     + COLUMN_PROFILE_PHOTO + " BLOB, "
-                    + COLUMN_EDITED_DATETIME + " TEXT DEFAULT CURRENT_TIMESTAMP"
+                    + COLUMN_EDITED_DATETIME + " TEXT"
                     + ");";
 
     private static final String CREATE_TABLE_SCANNED_QR =
@@ -74,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Insert User
     public boolean insertUser(String mobileno, String userid, String firstName, String middleName,
-                              String lastName, String userAccess, byte[] profilePhoto) {
+                              String lastName, String userAccess, String profilePhoto, String editeddatetime) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_MOBILE_NO, mobileno);
@@ -84,6 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_LAST_NAME, lastName);
         values.put(COLUMN_USER_ACCESS, userAccess);
         values.put(COLUMN_PROFILE_PHOTO, profilePhoto);
+        values.put(COLUMN_EDITED_DATETIME, editeddatetime);
 
         long result = db.insert(TABLE_USERS, null, values);
         return result != -1;
@@ -105,6 +106,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllUsers() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_USERS, null);
+    }
+
+    public Cursor getUserById(String userid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT " + COLUMN_EDITED_DATETIME + " FROM " + TABLE_USERS + " WHERE " + COLUMN_MOBILE_NO + "= ?", new String[]{userid});
     }
 
     // Retrieve All QR Scans

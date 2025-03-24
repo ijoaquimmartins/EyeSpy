@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -23,7 +24,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -92,11 +95,28 @@ public class Login extends AppCompatActivity {
 
     public void login(){
         // Base64.getEncoder().encodeToString(userDetails.UserId.getBytes());
+        String editedDatetime;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         stMobileno = Base64.getEncoder().encodeToString((etMobileNo.getText().toString().trim()).getBytes());
         stPassword = Base64.getEncoder().encodeToString((etPassword.getText().toString().trim()).getBytes());
 
         MobileNo = stMobileno.toString();
+
+        Cursor cursor = dbHelper.getUserById(stMobileno);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_EDITED_DATETIME);
+
+            if (columnIndex != -1) {
+                editedDatetime = cursor.getString(columnIndex);
+            } else {
+                editedDatetime = sdf.format(new Date());
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
 
         if (!stMobileno.isEmpty() && !stPassword.isEmpty()) {
             OkHttpClient client = new OkHttpClient.Builder()
@@ -142,6 +162,7 @@ public class Login extends AppCompatActivity {
 
                             runOnUiThread(() -> {
                                 if (msg.equalsIgnoreCase("success")) {
+                                    SharedPreferences.UserId = userid;
                                     Intent intent = new Intent(Login.this, Loading.class);
                                     startActivity(intent);
                                     finish();
@@ -149,9 +170,9 @@ public class Login extends AppCompatActivity {
                                     stMassage = error;
                                     showAlertDialog();
                                 }else if (msg.equalsIgnoreCase("update")) {
-                                //    boolean updateuserdata = dbHelper.insertUser(
-                                //            mobileno, userid, first_name, middle_name, last_name, user_access, profilephoto, editeddatetime
-                                //    );
+                                    boolean updateuserdata = dbHelper.insertUser(
+                                            mobileno, userid, first_name, middle_name, last_name, user_access, profilephoto, editeddatetime
+                                    );
                                 }
                                 else {
                                     stMassage = msg;

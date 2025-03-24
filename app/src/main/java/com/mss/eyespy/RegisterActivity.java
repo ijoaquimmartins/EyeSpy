@@ -204,12 +204,10 @@ public class RegisterActivity extends AppCompatActivity {
                     .url(getUserTypeURL)
                     .get()
                     .build();
-
             try (Response response = client.newCall(request).execute()) {
                 if (response.isSuccessful() && response.body() != null) {
                     String responseData = response.body().string();
                     List<String> labels = new ArrayList<>();
-
                     try {
                         JSONArray jsonArray = new JSONArray(responseData);
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -220,7 +218,6 @@ public class RegisterActivity extends AppCompatActivity {
                             labels.add(label);
                             labelValueMap.put(label, value); // Now accessible globally
                         }
-
                         mainHandler.post(() -> {
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(RegisterActivity.this,
                                     android.R.layout.simple_spinner_item, labels);
@@ -238,9 +235,7 @@ public class RegisterActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
-
     }
-
     private void showDatePicker(EditText editText) {
         selectedEditText = editText;
         Calendar calendar = Calendar.getInstance();
@@ -337,7 +332,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         stPassword = Base64.getEncoder().encodeToString(et_Password.getText().toString().trim().getBytes());
         stConPassword = Base64.getEncoder().encodeToString(et_Confirm_Password.getText().toString().trim().getBytes());
-    //    stUserType  = Base64.getEncoder().encodeToString(selectedValue.trim().getBytes());
+    //  stUserType  = Base64.getEncoder().encodeToString(selectedValue.trim().getBytes());
+
+        String dj_newdate = GlobalClass.convertDateFormat(et_DoJ.getText().toString().trim());
+        String dob_newdate = GlobalClass.convertDateFormat(et_DateOfBirth.getText().toString().trim());
 
         if (areFieldsEmpty(et_DoJ, et_FirstName, et_LastName, et_DateOfBirth, et_MobileNo, et_Email, et_PermanentAddress, et_CurrentAddress, et_Password, et_Confirm_Password )) {
             stMassage = "All (*) marked fields are mandatory";
@@ -362,13 +360,16 @@ public class RegisterActivity extends AppCompatActivity {
 
         RequestBody imageRequestBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
 
+        assert dj_newdate != null;
+        assert dob_newdate != null;
+
         MultipartBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("usertype", selectedValue)
-                .addFormDataPart("dt_joning", et_DoJ.getText().toString().trim())
+                .addFormDataPart("dt_joning", dj_newdate)
                 .addFormDataPart("first_name", et_FirstName.getText().toString().trim())
                 .addFormDataPart("middle_name", et_MiddleName.getText().toString().trim())
                 .addFormDataPart("last_name", et_LastName.getText().toString().trim())
-                .addFormDataPart("dateofbirth", et_DateOfBirth.getText().toString().trim())
+                .addFormDataPart("dateofbirth", dob_newdate)
                 .addFormDataPart("mobileno", et_MobileNo.getText().toString().trim())
                 .addFormDataPart("email", et_Email.getText().toString().trim())
                 .addFormDataPart("aadhar_no", et_AadharCard.getText().toString().trim())
@@ -380,6 +381,9 @@ public class RegisterActivity extends AppCompatActivity {
                 .addFormDataPart("password_confirmation", stConPassword)
                 .addFormDataPart("formtype", "MOBILEADD")
                 .addFormDataPart("status", "0")
+                .addFormDataPart("formid", "")
+                .addFormDataPart("created_by", UserId)
+                .addFormDataPart("updated_by", UserId)
                 .addFormDataPart("photo", imageFile.getName(), imageRequestBody)
                 .build();
 
@@ -406,6 +410,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if(msg.equalsIgnoreCase("success")){
                             stMassage = responseBody;
                             showAlertDialog();
+
                         } else if (error.equalsIgnoreCase("failed")) {
                             stMassage = responseBody;
                             showAlertDialog();

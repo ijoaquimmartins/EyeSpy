@@ -9,7 +9,6 @@
     tools:context=".VisitorAdd">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -20,7 +19,7 @@
             android:gravity="center_horizontal"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="10dp"/>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -30,12 +29,6 @@
                 android:layout_height="50dp"
                 android:orientation="vertical"
                 android:layout_margin="5dp">
-
-                <Spinner
-                    android:id="@+id/spn_EntryLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp" />
                 <EditText
                     android:id="@+id/et_VisitorFullName"
                     android:layout_width="match_parent"
@@ -72,13 +65,14 @@
                         android:visibility="gone"
                         android:layout_margin="5dp"/>
                 </LinearLayout>
-                <ToggleButton
-                    android:id="@+id/tb_Vehicle"
-                    android:layout_width="wrap_content"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_Vehicle"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textOff="With Vehicle"
-                    android:textOn="Without Vehicle"
-                    android:layout_margin="5dp"/>
+                    android:text="Vehicle"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:checked="true"/>
                 <EditText
                     android:id="@+id/et_VisitorVehicleNo"
                     android:layout_width="match_parent"
@@ -110,19 +104,21 @@
                         android:visibility="gone"
                         android:layout_margin="5dp"/>
                 </LinearLayout>
-                <Spinner
-                    android:id="@+id/sp_Visiting_To"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"/>
                 <EditText
                     android:id="@+id/et_Visiting_To"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="horizontal"
                     android:singleLine="true"
-                    android:visibility="gone"
                     android:hint="Visiting To"
+                    android:layout_margin="5dp"/>
+                <EditText
+                    android:id="@+id/et_Visiting_Location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="horizontal"
+                    android:singleLine="true"
+                    android:hint="Visiting Location"
                     android:layout_margin="5dp"/>
                 <EditText
                     android:id="@+id/et_Purpose"

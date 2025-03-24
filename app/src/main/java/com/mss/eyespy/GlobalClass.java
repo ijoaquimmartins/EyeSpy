@@ -12,6 +12,10 @@ import android.widget.TextView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class GlobalClass {
 
     public static final String SHARED_PREFS = "sharedprefs";
@@ -60,6 +64,19 @@ public class GlobalClass {
     public static void exitApp(Activity activity) {
         activity.finishAffinity();
         System.exit(0);
+    }
+
+    public static String convertDateFormat(String inputDate) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        try {
+            Date date = inputFormat.parse(inputDate);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

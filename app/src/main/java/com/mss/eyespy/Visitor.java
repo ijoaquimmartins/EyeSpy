@@ -29,13 +29,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class Visitor extends AppCompatActivity {
     DrawerLayout drawerLayout;
     ImageView menu, photo;
     LinearLayout ll_Home, ll_Register, ll_Attendance, ll_Patrolling, ll_ShiftTimings, ll_Logout, ll_Exit, ll_Visitor;
     TextView tv_App_Ver_Up, tv_UserName;
 
-    Button floating_action_button,floating_action_accept;
+    FloatingActionButton floating_action_button,floating_action_accept;
     CheckBox cb_GetLayout;
     LinearLayout ll_VisitorDateWise;
     TextView tv_FromDate, tv_ToDate;
@@ -100,7 +102,6 @@ public class Visitor extends AppCompatActivity {
             tv_FromDate.setText("");
             tv_ToDate.setText("");
         }
-
     }
 
     @Override
@@ -108,4 +109,5 @@ public class Visitor extends AppCompatActivity {
         super.onPause();
         closeDrawer(drawerLayout);
     }
+
 }
