@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VisitorConfirm"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:scrollbars="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Visitor Deatils"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+        <Button
+            android:id="@+id/btn_ScanCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SCAN CODE"
+            android:layout_margin="10dp"/>
+        <Button
+            android:id="@+id/btn_EnterCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ENTER CODE"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_VisitorDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/tv_VisitorName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Visitor Name"
+            android:textSize="16sp"
+            android:layout_marginBottom="10dp"/>
+        <TextView
+            android:id="@+id/tv_VisitorMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Visitor Mobile"
+            android:textSize="16sp"
+            android:layout_marginBottom="10dp"/>
+        <TextView
+            android:id="@+id/tv_VehicleNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Vehicle No"
+            android:textSize="16sp"
+            android:layout_marginBottom="10dp"/>
+        <ImageView
+            android:id="@+id/iv_VisitorPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/iv_VehiclePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONFIRM"
+                android:layout_margin="10dp"/>
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:layout_margin="10dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

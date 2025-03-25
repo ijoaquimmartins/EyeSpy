@@ -82,12 +82,13 @@ public class Visitor extends AppCompatActivity {
 
         floating_action_button = findViewById(R.id.floating_action_button);
         floating_action_button.setOnClickListener(view -> {
-            Intent i =new Intent(this, VisitorAdd.class);
+            Intent i = new Intent(this, VisitorAdd.class);
             startActivity(i);
         });
         floating_action_accept = findViewById(R.id.floating_action_accept);
         floating_action_accept.setOnClickListener(view -> {
-
+            Intent i = new Intent(this, VisitorConfirm.class);
+            startActivity(i);
         });
 
         cb_GetLayout = findViewById(R.id.cb_GetLayout);

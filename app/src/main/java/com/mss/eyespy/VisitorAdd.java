@@ -282,7 +282,7 @@ public class VisitorAdd extends AppCompatActivity {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-        MultipartBody.Builder requestBody = new MultipartBody.Builder()
+        MultipartBody.Builder formBodyBuilder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("formid", "")
                 .addFormDataPart("formtype", "ADD")
@@ -297,15 +297,15 @@ public class VisitorAdd extends AppCompatActivity {
                 .addFormDataPart("updated_by", UserId);
 
         if (imageFile1 != null) {
-            requestBody.addFormDataPart("image1", imageFile1.getName(),
+            formBodyBuilder.addFormDataPart("image1", imageFile1.getName(),
                     RequestBody.create(imageFile1, MediaType.parse("image/jpeg")));
         }
         if (imageFile2 != null) {
-            requestBody.addFormDataPart("image2", imageFile2.getName(),
+            formBodyBuilder.addFormDataPart("image2", imageFile2.getName(),
                     RequestBody.create(imageFile2, MediaType.parse("image/jpeg")));
         }
 
-        RequestBody requestBody = requestBody.build();
+        RequestBody requestBody = formBodyBuilder.build();
 
         Request request = new Request.Builder()
                 .url(VisitoraddURL)

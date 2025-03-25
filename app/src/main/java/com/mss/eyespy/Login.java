@@ -159,7 +159,6 @@ public class Login extends AppCompatActivity {
                             String profilephoto = jsonResponse.optString("profilephoto", "");
                             String editeddatetime = jsonResponse.optString("editeddatetime", "");
 
-
                             runOnUiThread(() -> {
                                 if (msg.equalsIgnoreCase("success")) {
                                     SharedPreferences.UserId = userid;
