@@ -199,7 +199,7 @@ public class Patrolling extends AppCompatActivity {
                 .url(ScanQRUrl)
                 .post(formBody)
                 .build();
-        //connect to client and get responce
+        //connect to client and get response
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

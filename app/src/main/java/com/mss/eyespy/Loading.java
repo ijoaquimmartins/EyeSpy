@@ -2,6 +2,7 @@ package com.mss.eyespy;
 
 import static com.mss.eyespy.SharedPreferences.*;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -26,6 +27,8 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -93,7 +96,7 @@ public class Loading extends AppCompatActivity {
 
     // Simulating tasks (Replace with real logic)
     private void fetchData() {
-        simulateTask(2000); // Simulate work for 2 seconds
+        checkPermissions();
     }
 
     private void loadAssets() {
@@ -116,6 +119,22 @@ public class Loading extends AppCompatActivity {
             Thread.sleep(duration);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+    public void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//            String imageUrl = ImageURL+ProfilePhoto;
+//            ImageHelper.downloadAndSaveImage(this, imageUrl);
+        } else {
+            Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
         }
     }
 }

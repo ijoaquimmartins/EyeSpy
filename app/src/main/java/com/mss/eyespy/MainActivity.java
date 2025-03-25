@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setAppVersion(this, tv_App_Ver_Up);
         menu.setOnClickListener(view -> {openDrawer(drawerLayout);});
         tv_UserName.setText(UserFullName);
+        ImageHelper.applySavedImage(this, photo);
 
         ll_Home = findViewById(R.id.ll_Home);
         ll_Home.setOnClickListener(view -> recreate());

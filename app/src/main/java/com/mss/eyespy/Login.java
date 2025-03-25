@@ -2,6 +2,8 @@ package com.mss.eyespy;
 
 import com.mss.eyespy.DatabaseHelper.*;
 import com.mss.eyespy.GlobalClass.*;
+
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -46,8 +48,9 @@ import okhttp3.Response;
 public class Login extends AppCompatActivity {
 
     String LoginUrl = URL+"login";
+    String editedDatetime, userid, first_name, middle_name, last_name, user_access, profilephoto, usertype, editeddatetime;
     EditText etMobileNo, etPassword;
-    TextView tvVersion;
+    TextView tvVersion,tv_editeddatetime;
     Button btnLogin, btnCancel;
     CheckBox cbRememberMe;
     public String mobileno, password, stMassage, stMobileno, stPassword;
@@ -64,6 +67,7 @@ public class Login extends AppCompatActivity {
 
         etMobileNo = findViewById(R.id.et_MobileNo);
         etPassword = findViewById(R.id.et_Password);
+        tv_editeddatetime = findViewById(R.id.tv_editeddatetime);
         tvVersion = findViewById(R.id.tv_App_version);
         btnLogin = findViewById(R.id.btn_Login);
         btnCancel = findViewById(R.id.btn_Cancel);
@@ -72,6 +76,13 @@ public class Login extends AppCompatActivity {
 
         etMobileNo.setText(" ");
         etPassword.setText(" ");
+        tv_editeddatetime.setText(" ");
+
+//        if (EditedDateTime.equals("")){
+//            editedDatetime = "1985-11-23T00:20:00.000000Z";
+//        }else {
+//            editedDatetime = EditedDateTime;
+//        }
 
         autologin();
 
@@ -95,7 +106,7 @@ public class Login extends AppCompatActivity {
 
     public void login(){
         // Base64.getEncoder().encodeToString(userDetails.UserId.getBytes());
-        String editedDatetime;
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         stMobileno = Base64.getEncoder().encodeToString((etMobileNo.getText().toString().trim()).getBytes());
@@ -103,6 +114,7 @@ public class Login extends AppCompatActivity {
 
         MobileNo = stMobileno.toString();
 
+        /*
         Cursor cursor = dbHelper.getUserById(stMobileno);
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -111,12 +123,13 @@ public class Login extends AppCompatActivity {
             if (columnIndex != -1) {
                 editedDatetime = cursor.getString(columnIndex);
             } else {
-                editedDatetime = sdf.format(new Date());
+                editedDatetime = "0";
             }
         }
         if (cursor != null) {
             cursor.close();
         }
+*/
 
         if (!stMobileno.isEmpty() && !stPassword.isEmpty()) {
             OkHttpClient client = new OkHttpClient.Builder()
@@ -128,6 +141,7 @@ public class Login extends AppCompatActivity {
             FormBody formBody = new FormBody.Builder()
                     .add("username", stMobileno)
                     .add("password", stPassword)
+        //            .add("editeddatetime", EditedDateTime)
                     .build();
 
             Request request = new Request.Builder()
@@ -149,29 +163,47 @@ public class Login extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(responseBody);
                             String error = jsonResponse.optString("error", "");
-                            String msg = jsonResponse.optString("msg", ""); // Get 'msg' from response
-                            String mobileno = jsonResponse.optString("mobileno", "");
-                            String userid = jsonResponse.optString("userid", "");
-                            String first_name = jsonResponse.optString("first_name", "");
-                            String middle_name = jsonResponse.optString("middle_name", "");
-                            String last_name = jsonResponse.optString("last_name", "");
-                            String user_access = jsonResponse.optString("user_access", "");
-                            String profilephoto = jsonResponse.optString("profilephoto", "");
-                            String editeddatetime = jsonResponse.optString("editeddatetime", "");
+                            String msg = jsonResponse.optString("msg", "");
+                             userid = jsonResponse.optString("userid", "");
+                             first_name = jsonResponse.optString("first_name", "");
+                             middle_name = jsonResponse.optString("middle_name", "");
+                             last_name = jsonResponse.optString("last_name", "");
+                             user_access = jsonResponse.optString("user_access", "");
+                             profilephoto = jsonResponse.optString("photo", "");
+                             usertype = jsonResponse.optString("usertype", "");
+                             editeddatetime = jsonResponse.optString("updated_at","");
 
                             runOnUiThread(() -> {
-                                if (msg.equalsIgnoreCase("success")) {
+                                if (!msg.isEmpty()) {
                                     SharedPreferences.UserId = userid;
+                                    if (middle_name.isEmpty() || middle_name.equals("null")){
+                                        SharedPreferences.UserFullName = first_name+" "+last_name;
+                                    }else {
+                                        SharedPreferences.UserFullName = first_name+" "+middle_name+" "+last_name;
+                                    }
+                                    SharedPreferences.UserAccess = user_access;
+                                    SharedPreferences.ProfilePhoto = profilephoto;
+                                    SharedPreferences.UserType = usertype;
+                                    SharedPreferences.EditedDateTime = editeddatetime;
+                                    String imageUrl = ImageURL+profilephoto;
+                                    ImageHelper.downloadAndSaveImage(Login.this, imageUrl);
                                     Intent intent = new Intent(Login.this, Loading.class);
                                     startActivity(intent);
                                     finish();
-                                } else if (msg.equalsIgnoreCase("failed")) {
+                                } else if (!error.isEmpty()) {
                                     stMassage = error;
                                     showAlertDialog();
                                 }else if (msg.equalsIgnoreCase("update")) {
+
+                                    String imageUrl = ImageURL+profilephoto;
+                                    ImageHelper.downloadAndSaveImage(Login.this, imageUrl);
+
                                     boolean updateuserdata = dbHelper.insertUser(
                                             mobileno, userid, first_name, middle_name, last_name, user_access, profilephoto, editeddatetime
                                     );
+                                    Intent intent = new Intent(Login.this, Loading.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
                                 else {
                                     stMassage = msg;
@@ -198,6 +230,16 @@ public class Login extends AppCompatActivity {
         android.content.SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(MOBILE_NO, etMobileNo.getText().toString().trim());
         editor.putString(PASSWORD, etPassword.getText().toString().trim());
+        if (!middle_name.equals("") || !middle_name.equals("null")){
+            editor.putString(UserFullName, first_name+" "+middle_name+" "+last_name);
+        }else {
+            editor.putString(UserFullName, first_name+" "+last_name);
+        }
+        editor.putString(UserId, userid.toString().trim());
+        editor.putString(UserAccess, user_access.toString().trim());
+        editor.putString(ProfilePhoto, profilephoto.toString().trim());
+        editor.putString(EditedDateTime, editeddatetime.toString().trim());
+        editor.putString(UserType, usertype.toString().trim());
         editor.apply();
     }
     public void autologin(){
@@ -206,6 +248,8 @@ public class Login extends AppCompatActivity {
         password = sharedPreferences.getString(PASSWORD, "");
         etMobileNo.setText(mobileno);
         etPassword.setText(password);
+        tv_editeddatetime.setText(EditedDateTime);
+
     }
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -214,9 +258,7 @@ public class Login extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 dialog.dismiss();
-
             }
         });
         builder.setCancelable(false);
