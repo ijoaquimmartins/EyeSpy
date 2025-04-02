@@ -23,19 +23,19 @@
                 android:id="@+id/tv_LocationName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="LocationName"
+                android:text="Location Name"
                 android:textSize="16sp"/>
             <TextView
                 android:id="@+id/tv_LocationPoint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="LocationPoint"
+                android:text="Location Point"
                 android:textSize="14sp"/>
             <TextView
-                android:id="@+id/tv_TimeToScan"
+                android:id="@+id/tv_TimeScanned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TimeToScan"
+                android:text="Time Scanned"
                 android:textSize="12sp"/>
             <TextView
                 android:id="@+id/tv_QrCodeId"

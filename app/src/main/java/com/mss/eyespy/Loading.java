@@ -3,54 +3,20 @@ package com.mss.eyespy;
 import static com.mss.eyespy.SharedPreferences.*;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.icu.util.Calendar;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
-import android.util.Log;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-
-import com.bumptech.glide.Glide;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class Loading extends AppCompatActivity {
     private ProgressBar progressBar;

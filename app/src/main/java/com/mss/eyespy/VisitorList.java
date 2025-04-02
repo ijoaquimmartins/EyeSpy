@@ -1,62 +1,73 @@
 package com.mss.eyespy;
 
 public class VisitorList {
-    private String visitorname, visitingto, image, intime, outtime, qrcode;
+    private String id;
+    private String visiting_to;
+    private String code;
+    private String flat_no;
+    private String visitors_name;
+    private String contact_no;
+    private String photo;
+    private String vehicleno;
+    private String vehicle_photo;
+    private String in_datetime;
+    private String out_datetime;
+    private String purpose;
+    private String confirm_by;
 
-    public VisitorList(String visitorname, String visitingto, String image, String intime, String outtime, String qrcode) {
-        this.visitorname = visitorname;
-        this.visitingto = visitingto;
-        this.image = image;
-        this.intime = intime;
-        this.outtime = outtime;
-        this.qrcode = qrcode;
+    public VisitorList(String id, String code, String visiting_to, String flat_no, String visitors_name, String contact_no, String photo, String vehicleno, String vehicle_photo, String in_datetime, String out_datetime, String purpose, String confirm_by) {
+        this.id = id;
+        this.code = code;
+        this.visiting_to = visiting_to;
+        this.flat_no = flat_no;
+        this.visitors_name = visitors_name;
+        this.contact_no = contact_no;
+        this.photo = photo;
+        this.vehicleno = vehicleno;
+        this.vehicle_photo = vehicle_photo;
+        this.in_datetime = in_datetime;
+        this.out_datetime = out_datetime;
+        this.purpose = purpose;
+        this.confirm_by = confirm_by;
     }
 
-    public String getVisitorname() {
-        return visitorname;
+    public String getId() {
+        return id;
     }
-
-    public void setVisitorname(String visitorname) {
-        this.visitorname = visitorname;
+    public String getCode() {
+        return code;
     }
-
-    public String getVisitingto() {
-        return visitingto;
+    public String getVisiting_to() {
+        return visiting_to;
     }
-
-    public void setVisitingto(String visitingto) {
-        this.visitingto = visitingto;
+    public String getFlat_no() {
+        return flat_no;
     }
-
-    public String getImage() {
-        return image;
+    public String getVisitors_name() {
+        return visitors_name;
     }
-
-    public void setImage(String image) {
-        this.image = image;
+    public String getContact_no() {
+        return contact_no;
     }
-
-    public String getIntime() {
-        return intime;
+    public String getPhoto() {
+        return photo;
     }
-
-    public void setIntime(String intime) {
-        this.intime = intime;
+    public String getVehicleno() {
+        return vehicleno;
     }
-
-    public String getOuttime() {
-        return outtime;
+    public String getVehicle_photo() {
+        return vehicle_photo;
     }
-
-    public void setOuttime(String outtime) {
-        this.outtime = outtime;
+    public String getIn_datetime() {
+        return in_datetime;
     }
-
-    public String getQrcode() {
-        return qrcode;
+    public String getOut_datetime() {
+        return out_datetime;
     }
-
-    public void setQrcode(String qrcode) {
-        this.qrcode = qrcode;
+    public String getPurpose() {
+        return purpose;
+    }
+    public String getConfirm_by() {
+        return confirm_by;
     }
 }

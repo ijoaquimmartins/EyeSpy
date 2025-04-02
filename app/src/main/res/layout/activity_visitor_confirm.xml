@@ -36,66 +36,73 @@
             android:text="ENTER CODE"
             android:layout_margin="10dp"/>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_VisitorDetails"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
-        <ImageView
-            android:id="@+id/iv_VisitorPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tv_VisitorName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Visitor Name"
-            android:textSize="16sp"
-            android:layout_marginBottom="10dp"/>
-        <TextView
-            android:id="@+id/tv_VisitorMobile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Visitor Mobile"
-            android:textSize="16sp"
-            android:layout_marginBottom="10dp"/>
-        <TextView
-            android:id="@+id/tv_VehicleNo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Vehicle No"
-            android:textSize="16sp"
-            android:layout_marginBottom="10dp"/>
-        <TextView
-            android:id="@+id/tv_InTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="In Time"
-            android:textSize="16sp"
-            android:layout_marginBottom="10dp"/>
-        <ImageView
-            android:id="@+id/iv_VehiclePhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
         <LinearLayout
+            android:id="@+id/ll_VisitorDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <Button
-                android:id="@+id/btn_confirm"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+            <ImageView
+                android:id="@+id/iv_VisitorPhoto"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tv_VisitorName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CONFIRM"
-                android:layout_margin="10dp"/>
-            <Button
-                android:id="@+id/btn_cancel"
+                android:hint="Visitor Name"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp"/>
+            <TextView
+                android:id="@+id/tv_VisitorMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Visitor Mobile"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp"/>
+            <TextView
+                android:id="@+id/tv_VehicleNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Vehicle No"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp"/>
+            <TextView
+                android:id="@+id/tv_InTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="In Time"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp"/>
+            <ImageView
+                android:id="@+id/iv_VehiclePhoto"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel"
-                android:layout_margin="10dp"/>
+                android:orientation="horizontal"
+                android:gravity="center">
+                <Button
+                    android:id="@+id/btn_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CONFIRM"
+                    android:layout_margin="10dp"/>
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

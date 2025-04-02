@@ -40,11 +40,12 @@ import okhttp3.Response;
 
 public class VisitorConfirm extends AppCompatActivity {
     LinearLayout ll_VisitorDetails;
-    Button btn_ScanCode, btn_EnterCode, btn_confirm, btn_cancel;
+    Button btn_ScanCode, btn_EnterCode, btn_confirm, btn_cancel, btn_close, btn_ok;
     TextView tv_VisitorName, tv_VisitorMobile, tv_VehicleNo, tv_InTime, tv_Error ;
     EditText et_Code;
     ImageView iv_VisitorPhoto, iv_VehiclePhoto;
-    String stCode, GetVisitorUrl = URL+"" ;
+    String stCode, GetVisitorUrl = URL+"get-visitor-bycode" ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +79,6 @@ public class VisitorConfirm extends AppCompatActivity {
         qrCodeLauncher.launch(options);
 
     }
-
     //Open Scanner
     private final ActivityResultLauncher<ScanOptions> qrCodeLauncher =
             registerForActivityResult(new ScanContract(), result -> {
@@ -104,35 +104,36 @@ public class VisitorConfirm extends AppCompatActivity {
 
     private void CodeConfirm(){
         AlertDialog.Builder builder = new AlertDialog.Builder(VisitorConfirm.this);
-        LayoutInflater inflater =getLayoutInflater();
+        LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.visitor_confirm_code, null);
         builder.setView(view);
 
+        AlertDialog dialog = builder.create();
+
         et_Code = view.findViewById(R.id.et_Code);
         tv_Error = view.findViewById(R.id.tv_Error);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        btn_ok = view.findViewById(R.id.btn_ok);
+        btn_close = view.findViewById(R.id.btn_close);
 
-                if(!et_Code.equals("") || et_Code.length() == 4){
-                    tv_Error.setVisibility(VISIBLE);
-                } else {
+        btn_ok.setOnClickListener(view1 -> {
+            String inputCode = et_Code.getText().toString().trim();
+                if(inputCode.length() == 4){
+                    stCode = inputCode;
                     GetVisitorData();
                     ll_VisitorDetails.setVisibility(VISIBLE);
-                    dialogInterface.dismiss();
+                    dialog.dismiss();
+                } else {
+                    tv_Error.setVisibility(VISIBLE);
                 }
-            }
         });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        builder.show();
-    }
 
-    private void GetVisitorData(){
+        btn_close.setOnClickListener(view1 -> dialog.dismiss());
+
+
+        dialog.show();
+    }
+    public void GetVisitorData(){
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -140,7 +141,7 @@ public class VisitorConfirm extends AppCompatActivity {
                 .build();
 
         FormBody formBody = new FormBody.Builder()
-                .add("confirmcode", stCode)
+                .add("code", stCode)
                 .build();
 
         Request request = new Request.Builder()
@@ -163,32 +164,25 @@ public class VisitorConfirm extends AppCompatActivity {
                         JSONObject jsonResponse = new JSONObject(responseBody);
                         String error = jsonResponse.optString("error", "");
                         String msg = jsonResponse.optString("msg", ""); // Get 'msg' from response
-                        String VisitorPhoto = jsonResponse.optString("mobileno", "");
-                        String VisitorName = jsonResponse.optString("userid", "");
-                        String VisitorMobile = jsonResponse.optString("first_name", "");
-                        String VehicleNo = jsonResponse.optString("middle_name", "");
-                        String InTime = jsonResponse.optString("last_name", "");
-                        String VehiclePhoto = jsonResponse.optString("user_access", "");
+                        String id = jsonResponse.optString("id", "");
+                        String VisitorName = jsonResponse.optString("visitors_name", "");
+                        String VisitorMobile = jsonResponse.optString("contact_no", "");
+                        String VisitorPhoto = jsonResponse.optString("photo", "");
+                        String VehicleNo = jsonResponse.optString("vehicleno", "");
+                        String VehiclePhoto = jsonResponse.optString("vehicle_photo", "");
+                        String InTime = jsonResponse.optString("in_datetime", "");
 
                         runOnUiThread(() -> {
-                            if (!msg.equals("")) {
-                                Glide.with(VisitorConfirm.this).load(ImageURL+VisitorPhoto).into(iv_VisitorPhoto);
+                                if(!VisitorPhoto.isEmpty()) {
+                                    Glide.with(VisitorConfirm.this).load(ImageURL + VisitorPhoto).into(iv_VisitorPhoto);
+                                }
                                 tv_VisitorName.setText(VisitorName);
                                 tv_VisitorMobile.setText(VisitorMobile);
                                 tv_InTime.setText(InTime);
                                 tv_VehicleNo.setText(VehicleNo);
-                                if(!VehiclePhoto.equals("")){
+                                if(!VehiclePhoto.isEmpty()){
                                     Glide.with(VisitorConfirm.this).load(ImageURL+VehiclePhoto).into(iv_VehiclePhoto);
                                 }
-
-                            } else if (msg.equalsIgnoreCase("failed")) {
-
-                            }else if (msg.equalsIgnoreCase("update")) {
-
-                            }
-                            else {
-
-                            }
                         });
                     } catch (Exception e) {
                         runOnUiThread(() ->

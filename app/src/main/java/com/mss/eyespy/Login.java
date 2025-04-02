@@ -201,6 +201,7 @@ public class Login extends AppCompatActivity {
                                     boolean updateuserdata = dbHelper.insertUser(
                                             mobileno, userid, first_name, middle_name, last_name, user_access, profilephoto, editeddatetime
                                     );
+
                                     Intent intent = new Intent(Login.this, Loading.class);
                                     startActivity(intent);
                                     finish();
@@ -230,16 +231,12 @@ public class Login extends AppCompatActivity {
         android.content.SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(MOBILE_NO, etMobileNo.getText().toString().trim());
         editor.putString(PASSWORD, etPassword.getText().toString().trim());
-        if (!middle_name.equals("") || !middle_name.equals("null")){
-            editor.putString(UserFullName, first_name+" "+middle_name+" "+last_name);
-        }else {
-            editor.putString(UserFullName, first_name+" "+last_name);
-        }
-        editor.putString(UserId, userid.toString().trim());
-        editor.putString(UserAccess, user_access.toString().trim());
-        editor.putString(ProfilePhoto, profilephoto.toString().trim());
-        editor.putString(EditedDateTime, editeddatetime.toString().trim());
-        editor.putString(UserType, usertype.toString().trim());
+    /*    editor.putString(UserFullName, first_name + " " + middle_name + " " + last_name);
+        editor.putString(UserId, userid.trim());
+        editor.putString(UserAccess, user_access.trim());
+        editor.putString(ProfilePhoto, profilephoto.trim());
+        editor.putString(EditedDateTime, editeddatetime.trim());
+        editor.putString(UserType, usertype.trim());*/
         editor.apply();
     }
     public void autologin(){
