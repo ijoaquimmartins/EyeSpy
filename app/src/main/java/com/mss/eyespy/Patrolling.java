@@ -3,20 +3,26 @@ package com.mss.eyespy;
 import static com.mss.eyespy.GlobalClass.*;
 import static com.mss.eyespy.SharedPreferences.*;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,21 +32,29 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Patrolling extends AppCompatActivity {
@@ -54,10 +68,11 @@ public class Patrolling extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private PatrollingAdaptar patrollingAdaptar;
     private List<PatrollingList> patrollingLists;
-    String qrid, qrData, stMassage, ScanQRUrl = URL+"user/save";
+    String qrData, stMassage, uploadqQrData = URL+"";
     double latitude, longitude;
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST = 100;
+    FloatingActionButton fabQrScan, fabUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,18 +102,30 @@ public class Patrolling extends AppCompatActivity {
         ll_Register.setOnClickListener(view -> redirectActivity(this, RegisterActivity.class));
 
         ll_Attendance = findViewById(R.id.ll_Attendance);
-        ll_Attendance.setOnClickListener(view -> recreate());
+        ll_Attendance.setOnClickListener(view -> redirectActivity(this, Attendance.class));
 
+        ll_Patrolling = findViewById(R.id.ll_Patrolling);
         ll_Patrolling.setOnClickListener(view -> recreate());
         /* Navigation Drawer  */
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         databaseHelper = new DatabaseHelper(this);
+        fabQrScan = findViewById(R.id.fab_qrScan);
+        fabUpload = findViewById(R.id.fab_upload);
 
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        databaseHelper = new DatabaseHelper(this);
+        patrollingLists = databaseHelper.getAllScannedQRs();
+
+        patrollingAdaptar = new PatrollingAdaptar(this, patrollingLists);
+        recyclerView.setAdapter(patrollingAdaptar);
+
+        fabQrScan.setOnClickListener(view -> checkPermissions());
 
     }
-
 
     @Override
     protected void onPause() {
@@ -117,16 +144,14 @@ public class Patrolling extends AppCompatActivity {
     }
 
     //Launch, Scan and send qr data to server
-    public void scanQRCode(String qrid) {
+    public void scanQRCode() {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Scan QR Code");
         options.setBeepEnabled(true);
         options.setOrientationLocked(true);
-
+        getLocation();
         qrCodeLauncher.launch(options);
-
     }
-
     //Open Scanner
     private final ActivityResultLauncher<ScanOptions> qrCodeLauncher =
             registerForActivityResult(new ScanContract(), result -> {
@@ -143,7 +168,12 @@ public class Patrolling extends AppCompatActivity {
                 .setMessage("Scan completed")
                 .setPositiveButton("Yes", (dialog, which) -> {
 
-                    uploadQrScanData();
+                    String stlatitude = Double.valueOf(latitude).toString();
+                    String stlongitude = Double.valueOf(longitude).toString();
+                    databaseHelper.insertScannedQR(qrData, stlatitude, stlongitude, "0");
+                    patrollingLists.clear();
+                    patrollingLists.addAll(databaseHelper.getAllScannedQRs());
+                    patrollingAdaptar.notifyDataSetChanged();
 
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
@@ -157,7 +187,7 @@ public class Patrolling extends AppCompatActivity {
 
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(1000);
+        locationRequest.setInterval(3000);
 
         LocationCallback locationCallback = new LocationCallback() {
             @Override
@@ -166,76 +196,84 @@ public class Patrolling extends AppCompatActivity {
                     Toast.makeText(Patrolling.this, "Location not found", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                 Toast.makeText(Patrolling.this, "Location found", Toast.LENGTH_SHORT).show();
 
                 for (Location location : locationResult.getLocations()) {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
+//                    Toast.makeText(Patrolling.this, "Location: " + latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
                 }
             }
         };
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+    private void checkPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
+        } else {
+            getLocation();
+            scanQRCode();
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                scanQRCode();
+            } else {
+                Toast.makeText(this, "Location permission is required", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     //Uploade the scanned qr code data
-    private void uploadQrScanData(){
-        String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+    public void uploadQrDataToServer(Context context) {
 
-        //Create client
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .build();
+        List<QrData> qrDataList = databaseHelper.getUnuploadedQrData();
 
-        //Data formbody
-        FormBody formBody = new FormBody.Builder()
-                .add("qrData", qrData)
-                .add("location", String.valueOf(latitude +", "+ longitude))
-                .add("deviceid", mId)
-                .add("id", UserTableId)
-                .build();
-        //Put all together to send data
+        if (qrDataList.isEmpty()) {
+            Log.d("UPLOAD", "No new data to upload.");
+            return;
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        for (QrData data : qrDataList) {
+            jsonArray.put(data.toJson());
+        }
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(
+                jsonArray.toString(),
+                MediaType.get("application/json; charset=utf-8")
+        );
+
         Request request = new Request.Builder()
-                .url(ScanQRUrl)
-                .post(formBody)
+                .url(uploadqQrData)
+                .post(body)
                 .build();
-        //connect to client and get response
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                runOnUiThread(() -> Toast.makeText(Patrolling.this, e.getMessage(), Toast.LENGTH_LONG).show());
+                Log.e("UPLOAD", "Failed to upload data: " + e.getMessage());
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    String responseBody = response.body().string().trim();
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
                     try {
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-                        String error = jsonResponse.optString("error", "");
-                        String msg = jsonResponse.optString("msg", "");
-                        runOnUiThread(() -> {
-                            if(msg.equalsIgnoreCase("success")){
-                                stMassage = msg;
-
-                                AlarmReceiver alarmReceiver = new AlarmReceiver(); //Connect to AlarmReceiver
-                                alarmReceiver.clearAlarm(context, Integer.parseInt(qrid)); // Call the Clear Alarm Function
-
-                                showAlertDialog();
-                            } else if (error.equalsIgnoreCase("failed")) {
-                                stMassage = error;
-                                showAlertDialog();
-                            }else{
-                                stMassage = msg;
-                                showAlertDialog();
-                            }
-                        });
+                        JSONArray responseArray = new JSONArray(responseBody);
+                        databaseHelper.updateQrDataFromServer(responseArray);
                     } catch (JSONException e) {
-                        runOnUiThread(() -> Toast.makeText(Patrolling.this, "JSON Parsing Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                        e.printStackTrace();
+                        Log.e("UPLOAD", "JSON parsing error");
                     }
-                }else {
-                    runOnUiThread(() ->
-                            Toast.makeText(Patrolling.this, "Server error", Toast.LENGTH_LONG).show());
+                } else {
+                    Log.e("UPLOAD", "Server error: " + response.code());
                 }
             }
         });

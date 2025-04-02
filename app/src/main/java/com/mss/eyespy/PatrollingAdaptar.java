@@ -1,11 +1,17 @@
 package com.mss.eyespy;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -30,20 +36,19 @@ public class PatrollingAdaptar extends RecyclerView.Adapter<PatrollingAdaptar.Vi
     @Override
     public void onBindViewHolder(@NonNull PatrollingAdaptar.ViewHolder holder, int position) {
         PatrollingList patrollingList = patrollingLists.get(position);
+        holder.tv_QrCode.setText(patrollingList.getQrcode());
+        holder.tv_QrName.setText(patrollingList.getQrname());
+        holder.tv_QrLocation.setText(patrollingList.getLatitude()+" "+patrollingList.getLongitude());
 
-        holder.tv_LocationName.setText(patrollingList.getColumnName());
-        holder.tv_LocationPoint.setText(patrollingList.getQrLocation());
-        holder.tv_TimeToScan.setText(patrollingList.getScanTimefr() + " - " + patrollingList.getScanTimeto());
-        holder.tv_QrCodeId.setText(String.valueOf(patrollingList.getQrcodeId()));
+        holder.tv_TimeScanned.setText(patrollingList.getScandatetime());
 
-        //On click function for each list view
-        holder.itemView.setOnClickListener(view -> {
-            String qrid = holder.tv_QrCodeId.getText().toString();
-
-            Patrolling patrollingfun = new Patrolling(); //calling qr scan from Patrolling Activity
-            patrollingfun.scanQRCode(qrid); // String qrid is only to send id to patrolling Activity to clear the alarm from alarm manager
-
-        });
+        if ("0".equals(patrollingList.getUploaded())) {
+            holder.iv_Uploaded.setColorFilter(ContextCompat.getColor(context, R.color.gray), PorterDuff.Mode.SRC_IN);
+        } else if ("1".equals(patrollingList.getUploaded())) {
+            holder.iv_Uploaded.setColorFilter(ContextCompat.getColor(context, R.color.green), PorterDuff.Mode.SRC_IN);
+        } else {
+            holder.iv_Uploaded.setColorFilter(ContextCompat.getColor(context, R.color.red), PorterDuff.Mode.SRC_IN);
+        }
     }
 
     @Override
@@ -52,14 +57,15 @@ public class PatrollingAdaptar extends RecyclerView.Adapter<PatrollingAdaptar.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_LocationName, tv_LocationPoint, tv_TimeToScan, tv_QrCodeId;
-
+        TextView tv_QrCode, tv_QrName, tv_QrLocation, tv_TimeScanned;
+        ImageView iv_Uploaded;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv_LocationName = itemView.findViewById(R.id.tv_LocationName);
-            tv_LocationPoint = itemView.findViewById(R.id.tv_LocationPoint);
-            tv_TimeToScan = itemView.findViewById(R.id.tv_TimeToScan);
-            tv_QrCodeId = itemView.findViewById(R.id.tv_QrCodeId);
+            tv_QrCode = itemView.findViewById(R.id.tv_QrCode);
+            tv_QrName = itemView.findViewById(R.id.tv_QrName);
+            tv_QrLocation = itemView.findViewById(R.id.tv_QrLocation);
+            tv_TimeScanned = itemView.findViewById(R.id.tv_TimeScanned);
+            iv_Uploaded = itemView.findViewById(R.id.iv_Uploaded);
         }
     }
 }

@@ -20,13 +20,19 @@
             android:orientation="vertical"
             android:padding="5dp">
             <TextView
-                android:id="@+id/tv_LocationName"
+                android:id="@+id/tv_QrCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location Name"
                 android:textSize="16sp"/>
             <TextView
-                android:id="@+id/tv_LocationPoint"
+                android:id="@+id/tv_QrName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location Point"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tv_QrLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location Point"
@@ -37,12 +43,6 @@
                 android:layout_height="wrap_content"
                 android:text="Time Scanned"
                 android:textSize="12sp"/>
-            <TextView
-                android:id="@+id/tv_QrCodeId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:visibility="gone"/>
         </LinearLayout>
     </HorizontalScrollView>
     <LinearLayout
@@ -52,10 +52,10 @@
         android:gravity="end|center"
         android:padding="5dp">
         <ImageView
-            android:id="@+id/iv_scan"
+            android:id="@+id/iv_Uploaded"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_scan" />
+            android:src="@drawable/ic_upload" />
     </LinearLayout>
 </LinearLayout>

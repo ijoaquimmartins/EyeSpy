@@ -14,6 +14,9 @@
         android:orientation="vertical">
         <include layout="@layout/toolbar"/>
         <!-- Layout Code Start -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -27,14 +30,37 @@
                     android:text="Patrolling"
                     android:textSize="28sp"
                     app:layout_constraintTop_toTopOf="parent"/>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
+                    <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="vertical"/>
-
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="vertical"/>
+                    </ScrollView>
             </LinearLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="90dp"
+                android:contentDescription="UPLOAD"
+                app:srcCompat="@drawable/ic_upload"
+                android:backgroundTint="@color/blue"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_qrScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="16dp"
+                android:contentDescription="SCAN"
+                app:srcCompat="@drawable/ic_qrcode"
+                android:backgroundTint="@color/gray"/>
+        </FrameLayout>
         <!-- Layout Code End -->
     </LinearLayout>
     <RelativeLayout
