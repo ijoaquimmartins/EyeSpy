@@ -36,6 +36,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -160,6 +161,18 @@ public class Visitor extends AppCompatActivity {
         visitorLists = new ArrayList<>();
         btn_FatchData.setOnClickListener(view -> getVisitorList());
         getVisitorList();
+
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.refreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                //    recreate();
+                    getVisitorList();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        );
     }
 
     @Override
@@ -173,14 +186,14 @@ public class Visitor extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    String formattedDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
-                    if(date_type.equals("1")){
-                        tv_FromDate.setText(formattedDate);
-                    }else if (date_type.equals("2")){
-                        tv_ToDate.setText(formattedDate);
-                    }
-                }, year, month, day);
+            (view, selectedYear, selectedMonth, selectedDay) -> {
+                String formattedDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
+                if(date_type.equals("1")){
+                    tv_FromDate.setText(formattedDate);
+                }else if (date_type.equals("2")){
+                    tv_ToDate.setText(formattedDate);
+                }
+            }, year, month, day);
         datePickerDialog.show();
     }
     private void getVisitorList(){
@@ -189,14 +202,14 @@ public class Visitor extends AppCompatActivity {
         String userId = SharedPreferences.UserId;
         String UserType = SharedPreferences.UserType;
 
-// Create client
+        // Create client
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-// Data form body
+        // Data form body
         FormBody formBody = new FormBody.Builder()
                 .add("src_fromdate", fromDate)
                 .add("src_todate", toDate)
@@ -204,13 +217,13 @@ public class Visitor extends AppCompatActivity {
                 .add("user_type", UserType)
                 .build();
 
-// Put all together to send data
+        // Put all together to send data
         Request request = new Request.Builder()
                 .url(visitorListUrl)
                 .post(formBody)
                 .build();
 
-// Connect to client and get response
+        // Connect to client and get response
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -262,12 +275,9 @@ public class Visitor extends AppCompatActivity {
                                 recyclerView.setAdapter(VisitorAdapter);
                             });
                         }
-
-
                     } catch (JSONException e) {
                         runOnUiThread(() -> Toast.makeText(Visitor.this, "JSON Parsing Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
                     }
-
                 } else {
                     runOnUiThread(() -> Toast.makeText(Visitor.this, "Server error", Toast.LENGTH_LONG).show());
                 }

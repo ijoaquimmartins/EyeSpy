@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -84,4 +85,19 @@ public class GlobalClass {
         }
     }
 
+    public static class DateTimeUtils {
+        public boolean isDateTimeSetManually(Context context) {
+            try {
+                int autoTime = Settings.Global.getInt(context.getContentResolver(), Settings.Global.AUTO_TIME);
+                int autoTimeZone = Settings.Global.getInt(context.getContentResolver(), Settings.Global.AUTO_TIME_ZONE);
+
+                // If either setting is disabled (0), then the user has manually set date/time
+                return autoTime == 0 || autoTimeZone == 0;
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+
+                return false; // Default to false if settings can't be found
+            }
+        }
+    }
 }

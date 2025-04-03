@@ -68,7 +68,24 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.ViewHold
             context.startActivity(intent);
         });
         holder.ll_showDetails.setOnClickListener(view -> {
+            Intent i = new Intent(context, VisitorOut.class);
 
+            Bundle bundle = new Bundle();
+            bundle.putString("id", visitorList.getId());
+            bundle.putString("photo", visitorList.getPhoto());
+            bundle.putString("visitorname", visitorList.getVisitors_name());
+            bundle.putString("contactno", visitorList.getContact_no());
+            bundle.putString("visitingto", visitorList.getVisiting_to());
+            bundle.putString("location", visitorList.getFlat_no());
+            bundle.putString("idatetime", visitorList.getIn_datetime());
+            bundle.putString("outdatetime", visitorList.getOut_datetime());
+            bundle.putString("confirmed", visitorList.getConfirm_by());
+            bundle.putString("purpose", visitorList.getPurpose());
+            bundle.putString("vehicleno", visitorList.getVehicleno());
+            bundle.putString("vehiclephoto", visitorList.getVehicle_photo());
+
+            i.putExtras(bundle);
+            context.startActivity(i);
         });
 
     }
