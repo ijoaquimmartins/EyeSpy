@@ -19,6 +19,7 @@
         android:gravity="center_horizontal"
         android:layout_marginTop="10dp"/>
     <LinearLayout
+        android:id="@+id/ll_Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -39,51 +40,53 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:layout_marginStart="10dp">
         <LinearLayout
             android:id="@+id/ll_VisitorDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
+            android:gravity="start"
             android:visibility="gone">
+
             <ImageView
                 android:id="@+id/iv_VisitorPhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_width="250dp"
+                android:layout_height="250dp" />
             <TextView
                 android:id="@+id/tv_VisitorName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Visitor Name"
                 android:textSize="16sp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="5dp"/>
             <TextView
                 android:id="@+id/tv_VisitorMobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Visitor Mobile"
                 android:textSize="16sp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="5dp"/>
             <TextView
                 android:id="@+id/tv_VehicleNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Vehicle No"
                 android:textSize="16sp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="5dp"/>
             <TextView
                 android:id="@+id/tv_InTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="In Time"
                 android:textSize="16sp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="5dp"/>
             <ImageView
                 android:id="@+id/iv_VehiclePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,13 +97,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CONFIRM"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="5dp"/>
                 <Button
                     android:id="@+id/btn_cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cancel"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="5dp"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

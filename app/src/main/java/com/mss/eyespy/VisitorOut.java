@@ -1,5 +1,6 @@
 package com.mss.eyespy;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.mss.eyespy.SharedPreferences.*;
 
@@ -75,21 +76,34 @@ public class VisitorOut extends AppCompatActivity {
         tvVisitingTo.setText(bundle.getString("visitingto"));
         tvVisitingLocation.setText(bundle.getString("location"));
         tvInTime.setText(bundle.getString("idatetime"));
-        if (bundle.getString("outdatetime").equals("null")){
-            btnOut.setVisibility(VISIBLE);
-        }else{
-            tvOutTime.setText(bundle.getString("outdatetime"));
-        }
 
-        if (!bundle.getString("confirmed").equals("")){
-            btnOut.setVisibility(VISIBLE);
+        String outdatetime = bundle.getString("outdatetime");
+        String confirmed = bundle.getString("confirmed");
+
+
+
+        if (confirmed.equals("NOT CONFIRMED")){
+            btnOut.setVisibility(GONE);
+            tvConfirmed.setText(bundle.getString("confirmed"));
         }else{
-            tvConfirmed.setText(bundle.getString("tvConfirmed"));
+            btnOut.setVisibility(VISIBLE);
+            tvConfirmed.setText(bundle.getString("confirmed"));
+
+            if (outdatetime != null ) {
+                btnOut.setVisibility(GONE);
+                tvOutTime.setVisibility(VISIBLE);
+                tvOutTime.setText(outdatetime);
+            } else {
+                btnOut.setVisibility(VISIBLE);
+                tvOutTime.setVisibility(GONE);
+            }
         }
 
         tvPurpose.setText(bundle.getString("purpose"));
 
-        if (!bundle.getString("vehicleno").equals("")){
+        String vehicleno = bundle.getString("vehicleno");
+
+        if (vehicleno != null || !vehicleno.isEmpty()){
             llVehicledetails.setVisibility(VISIBLE);
             tvVehicleno.setText(bundle.getString("vehicleno"));
             if (!bundle.getString("vehiclephoto").equals("")){
@@ -133,7 +147,6 @@ public class VisitorOut extends AppCompatActivity {
                     .add("formid", formid)
                     .add("formtype", "OUTTIME")
                     .add("updated_by", UserId)
-                    .add("out_datetime", editedDatetime)
                     .build();
 
             // Put all together to send data

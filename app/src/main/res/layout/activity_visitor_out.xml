@@ -118,7 +118,8 @@
                         android:layout_margin="5dp"
                         android:textSize="14sp"
                         android:text="Out date time"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
                 </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"

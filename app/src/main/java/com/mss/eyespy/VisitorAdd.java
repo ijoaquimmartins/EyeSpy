@@ -262,10 +262,6 @@ public class VisitorAdd extends AppCompatActivity {
 
     private void addvisitor(){
 
-        String editedDatetime;
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
-        editedDatetime = sdf.format(new Date());
-
         if (areFieldsEmpty(et_VisitorFullName, et_VisitorMobileNo, et_Visiting_To, et_Visiting_Location, et_Purpose)) {
             stMassage = "All (*) marked fields are mandatory";
             showAlertDialog();
@@ -292,16 +288,15 @@ public class VisitorAdd extends AppCompatActivity {
                 .addFormDataPart("visiting_to", et_Visiting_To.getText().toString().trim())
                 .addFormDataPart("flat_no", et_Visiting_Location.getText().toString().trim())
                 .addFormDataPart("purpose", et_Purpose.getText().toString().trim())
-                .addFormDataPart("in_datetime", editedDatetime)
                 .addFormDataPart("created_by", UserId)
                 .addFormDataPart("updated_by", UserId);
 
         if (imageFile1 != null) {
-            formBodyBuilder.addFormDataPart("image1", imageFile1.getName(),
+            formBodyBuilder.addFormDataPart("photo", imageFile1.getName(),
                     RequestBody.create(imageFile1, MediaType.parse("image/jpeg")));
         }
         if (imageFile2 != null) {
-            formBodyBuilder.addFormDataPart("image2", imageFile2.getName(),
+            formBodyBuilder.addFormDataPart("vehicle_photo", imageFile2.getName(),
                     RequestBody.create(imageFile2, MediaType.parse("image/jpeg")));
         }
 
@@ -366,8 +361,6 @@ public class VisitorAdd extends AppCompatActivity {
                 }else{
                     dialog.dismiss();
                 }
-
-
             }
         });
         builder.setCancelable(false);
