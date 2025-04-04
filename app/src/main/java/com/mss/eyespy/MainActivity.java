@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         ll_Visitor = findViewById(R.id.ll_Visitor);
         ll_Visitor.setOnClickListener(view -> redirectActivity(this, Visitor.class));
 
+
+
     }
 
     @Override

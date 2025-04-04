@@ -125,28 +125,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         values.put(COLUMN_QR_DATETIME, formattedTime);
 
-
         long result = db.insert(TABLE_SCANNED_QR, null, values);
         return result != -1;
     }
-
     // Retrieve All Users
     public Cursor getAllUsers() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_USERS, null);
     }
-
     public Cursor getUserById(String userid) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT " + COLUMN_EDITED_DATETIME + " FROM " + TABLE_USERS + " WHERE " + COLUMN_MOBILE_NO + "= ?", new String[]{userid});
     }
-
     // Retrieve All QR Scans
     public Cursor getAllScannedQR() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_SCANNED_QR, null);
     }
-
     public List<PatrollingList> getAllScannedQRs() {
         List<PatrollingList> scannedQRList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -174,18 +169,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<QrData> qrDataList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query("scanned_qr", // Table name
-                new String[]{"id", "qr_code", "qr_lat", "qr_long", "qr_datetime"}, // Columns
+        Cursor cursor = db.query("scanned_qr",
+                new String[]{"id", "qr_code", "latitude", "longitude", "datetime"},
                 "uploaded = 0", null, null, null, null);
+
+        String formtype = "MOBILEADD";
+
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 qrDataList.add(new QrData(
-                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("id")),
                         cursor.getString(cursor.getColumnIndexOrThrow("qr_code")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("qr_lat")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("qr_long")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("qr_datetime"))
+                        cursor.getString(cursor.getColumnIndexOrThrow("latitude")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("longitude")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("datetime")),
+                        SharedPreferences.UserId,
+                        formtype
                 ));
             }
             cursor.close();
@@ -193,6 +193,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return qrDataList;
     }
+//    void updateQrDataFromServer(JSONArray responseArray) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        try {
+//            for (int i = 0; i < responseArray.length(); i++) {
+//                JSONObject jsonObject = responseArray.getJSONObject(i);
+//                int id = jsonObject.getInt("id");
+//                String name = jsonObject.getString("name");
+//                int uploaded = jsonObject.getInt("uploaded");
+//                ContentValues values = new ContentValues();
+//
+//                values.put("name", name);
+//                values.put("uploaded", uploaded);
+//                db.update("scanned_qr", values, "id = ?", new String[]{String.valueOf(id)});
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } finally {
+//            db.close();
+//        }
+//    }
+
     void updateQrDataFromServer(JSONArray responseArray) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -200,11 +222,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             for (int i = 0; i < responseArray.length(); i++) {
                 JSONObject jsonObject = responseArray.getJSONObject(i);
                 int id = jsonObject.getInt("id");
-                String name = jsonObject.getString("name");
                 int uploaded = jsonObject.getInt("uploaded");
 
                 ContentValues values = new ContentValues();
-                values.put("name", name);
+
+                if (jsonObject.has("location") && !jsonObject.isNull("location")) {
+                    values.put("qr_name", jsonObject.getString("location"));
+                }
+
                 values.put("uploaded", uploaded);
 
                 db.update("scanned_qr", values, "id = ?", new String[]{String.valueOf(id)});

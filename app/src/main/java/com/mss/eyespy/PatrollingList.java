@@ -13,31 +13,24 @@ public class PatrollingList {
         this.uploaded = uploaded;
         this.scandatetime = scandatetime;
     }
-
     public String getId() {
         return id;
     }
-
     public String getQrcode() {
         return qrcode;
     }
-
     public String getQrname() {
         return qrname;
     }
-
     public String getLatitude() {
         return latitude;
     }
-
     public String getLongitude() {
         return longitude;
     }
-
     public String getUploaded() {
         return uploaded;
     }
-
     public String getScandatetime() {
         return scandatetime;
     }

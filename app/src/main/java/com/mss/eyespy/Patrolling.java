@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -68,7 +70,7 @@ public class Patrolling extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private PatrollingAdaptar patrollingAdaptar;
     private List<PatrollingList> patrollingLists;
-    String qrData, stMassage, uploadqQrData = URL+"";
+    String qrData, stMassage, uploadqQrData = URL+"save-qrscan";
     double latitude, longitude;
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST = 100;
@@ -124,6 +126,11 @@ public class Patrolling extends AppCompatActivity {
         recyclerView.setAdapter(patrollingAdaptar);
 
         fabQrScan.setOnClickListener(view -> checkPermissions());
+        fabUpload.setOnClickListener(view -> uploadQrDataToServer());
+
+/*        if (isNetworkAvailable()) {
+             uploadQrDataToServer();
+        }*/
 
     }
 
@@ -133,6 +140,9 @@ public class Patrolling extends AppCompatActivity {
 
         closeDrawer(drawerLayout); //On pause close Navigation Drawer
 
+//        if (isNetworkAvailable()) {
+//            uploadQrDataToServer();
+//        }
     }
     // Closing of Database Helper
     @Override
@@ -164,20 +174,18 @@ public class Patrolling extends AppCompatActivity {
     //Open scanner confirmation dialog
     public void showConfirmationDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Confirm Scan")
-                .setMessage("Scan completed")
-                .setPositiveButton("Yes", (dialog, which) -> {
-
-                    String stlatitude = Double.valueOf(latitude).toString();
-                    String stlongitude = Double.valueOf(longitude).toString();
-                    databaseHelper.insertScannedQR(qrData, stlatitude, stlongitude, "0");
-                    patrollingLists.clear();
-                    patrollingLists.addAll(databaseHelper.getAllScannedQRs());
-                    patrollingAdaptar.notifyDataSetChanged();
-
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .show();
+            .setTitle("Confirm Scan")
+            .setMessage("Scan completed")
+            .setPositiveButton("Yes", (dialog, which) -> {
+                String stlatitude = Double.valueOf(latitude).toString();
+                String stlongitude = Double.valueOf(longitude).toString();
+                databaseHelper.insertScannedQR(qrData, stlatitude, stlongitude, "0");
+                patrollingLists.clear();
+                patrollingLists.addAll(databaseHelper.getAllScannedQRs());
+                patrollingAdaptar.notifyDataSetChanged();
+            })
+            .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+            .show();
     }
 
     //Get GPS location
@@ -196,7 +204,6 @@ public class Patrolling extends AppCompatActivity {
                     Toast.makeText(Patrolling.this, "Location not found", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 for (Location location : locationResult.getLocations()) {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
@@ -204,7 +211,6 @@ public class Patrolling extends AppCompatActivity {
                 }
             }
         };
-
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
     private void checkPermissions() {
@@ -228,7 +234,7 @@ public class Patrolling extends AppCompatActivity {
     }
 
     //Uploade the scanned qr code data
-    public void uploadQrDataToServer(Context context) {
+    public void uploadQrDataToServer() {
 
         List<QrData> qrDataList = databaseHelper.getUnuploadedQrData();
 
@@ -242,16 +248,28 @@ public class Patrolling extends AppCompatActivity {
             jsonArray.put(data.toJson());
         }
 
-        OkHttpClient client = new OkHttpClient();
+        JSONObject jsonPayload = new JSONObject();
+        try {
+            jsonPayload.put("data", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
 
-        RequestBody body = RequestBody.create(
-                jsonArray.toString(),
-                MediaType.get("application/json; charset=utf-8")
-        );
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+        RequestBody body = RequestBody.create(jsonPayload.toString(), JSON);
 
         Request request = new Request.Builder()
                 .url(uploadqQrData)
                 .post(body)
+                .addHeader("Content-Type", "application/json")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -277,6 +295,12 @@ public class Patrolling extends AppCompatActivity {
                 }
             }
         });
+    }
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
     private void showAlertDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);

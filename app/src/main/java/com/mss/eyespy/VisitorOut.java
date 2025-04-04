@@ -182,7 +182,6 @@ public class VisitorOut extends AppCompatActivity {
                             String msg = jsonResponse.optString("msg", "");
 
                             runOnUiThread(() -> {
-
                                 if(!msg.equals("")){
                                     stMassage = msg;
                                     showAlertDialog();
@@ -190,13 +189,10 @@ public class VisitorOut extends AppCompatActivity {
                                     stMassage = error;
                                     showAlertDialog();
                                 }
-
                             });
-
                         } catch (JSONException e) {
                             runOnUiThread(() -> Toast.makeText(VisitorOut.this, "JSON Parsing Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
                         }
-
                     } else {
                         runOnUiThread(() -> Toast.makeText(VisitorOut.this, "Server error", Toast.LENGTH_LONG).show());
                     }

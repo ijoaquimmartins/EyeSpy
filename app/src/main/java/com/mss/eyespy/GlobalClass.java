@@ -1,5 +1,8 @@
 package com.mss.eyespy;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +11,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,6 +31,7 @@ import java.util.Date;
 
 public class GlobalClass {
 
+    Context context;
     public static final String SHARED_PREFS = "sharedprefs";
 
     // Open Navigation Drawer
@@ -96,8 +104,9 @@ public class GlobalClass {
             } catch (Settings.SettingNotFoundException e) {
                 e.printStackTrace();
 
-                return false; // Default to false if settings can't be found
+                return false;
             }
         }
     }
+
 }
