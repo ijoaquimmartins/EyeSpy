@@ -61,11 +61,11 @@ import okhttp3.Response;
 
 public class Patrolling extends AppCompatActivity {
 
-    private Context context;
     DrawerLayout drawerLayout; //Navigation drawer
     ImageView menu, photo;//Navigation drawer
-    LinearLayout ll_Home, ll_Register, ll_Attendance, ll_Patrolling, ll_ShiftTimings, ll_Logout, ll_Exit ; //Navigation drawer
-    TextView tv_App_Ver_Up, tv_UserName; //Navigation drawer
+    LinearLayout ll_Home, ll_Register, ll_Attendance, ll_Patrolling, ll_ShiftTimings, ll_Logout, ll_Exit, ll_Visitor;
+    TextView tv_App_Ver_Up, tv_UserName;//Navigation drawer
+    private Context context;
     private RecyclerView recyclerView;
     private DatabaseHelper databaseHelper;
     private PatrollingAdaptar patrollingAdaptar;
@@ -86,6 +86,7 @@ public class Patrolling extends AppCompatActivity {
         menu = findViewById(R.id.main_menu);
         photo = findViewById(R.id.iv_Photo);
         tv_UserName = findViewById(R.id.tv_UserName);
+
         ll_ShiftTimings = findViewById(R.id.ll_ShiftTimings);
         ll_Logout = findViewById(R.id.ll_Logout);
         ll_Exit = findViewById(R.id.ll_Exit);
@@ -96,9 +97,10 @@ public class Patrolling extends AppCompatActivity {
         setAppVersion(this, tv_App_Ver_Up);
         menu.setOnClickListener(view -> {openDrawer(drawerLayout);});
         tv_UserName.setText(UserFullName);
+        ImageHelper.applySavedImage(this, photo);
 
         ll_Home = findViewById(R.id.ll_Home);
-        ll_Home.setOnClickListener(view -> redirectActivity(this, MainActivity.class));
+        ll_Home.setOnClickListener(view -> redirectActivity(Patrolling.this, MainActivity.class));
 
         ll_Register = findViewById(R.id.ll_Register);
         ll_Register.setOnClickListener(view -> redirectActivity(this, RegisterActivity.class));
@@ -108,7 +110,10 @@ public class Patrolling extends AppCompatActivity {
 
         ll_Patrolling = findViewById(R.id.ll_Patrolling);
         ll_Patrolling.setOnClickListener(view -> recreate());
-        /* Navigation Drawer  */
+
+        ll_Visitor = findViewById(R.id.ll_Visitor);
+        ll_Visitor.setOnClickListener(view -> redirectActivity(this, Visitor.class));
+        /* Navigation Drawer*/
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

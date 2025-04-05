@@ -1,5 +1,6 @@
 package com.mss.eyespy;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.Manifest;
@@ -8,6 +9,7 @@ import static com.mss.eyespy.SharedPreferences.*;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentProviderOperation;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -17,6 +19,7 @@ import android.provider.Settings;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,13 +39,18 @@ import com.google.android.gms.location.LocationServices;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.security.PrivateKey;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -59,18 +67,18 @@ import okhttp3.Response;
 public class Attendance extends AppCompatActivity {
 
     DrawerLayout drawerLayout; //Navigation drawer
-    ImageView menu, photo; //Navigation drawer
-    LinearLayout ll_Home, ll_Register, ll_ShiftTimings, ll_Attendance, ll_Patrolling, ll_Logout, ll_Exit ; //Navigation drawer
-    TextView tv_App_Ver_Up, tv_UserName; //Navigation drawer
-    Button btn_MarkAttendance;
+    ImageView menu, photo;//Navigation drawer
+    LinearLayout ll_Home, ll_Register, ll_Attendance, ll_Patrolling, ll_ShiftTimings, ll_Logout, ll_Exit, ll_Visitor;
+    TextView tv_App_Ver_Up, tv_UserName;//Navigation drawer
+    Button btn_MarkAttendance, btn_MarkAttendanceOut;
     double latitude, longitude;
-    String qrData, stMassage, MarkAttendanceUrl= URL+"user/save";
-
+    String qrData, stMassage, stInOut = InOutStatus, MarkAttendanceUrl= URL+"save-attendance", GetAttnListUrl = URL+"user-attendance-today";
     private RecyclerView recyclerView;
     private AttendanceAdapter adapter;
     private List<AttendanceList> attendanceListList;
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST = 100;
+    SearchView svSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +90,7 @@ public class Attendance extends AppCompatActivity {
         menu = findViewById(R.id.main_menu);
         photo = findViewById(R.id.iv_Photo);
         tv_UserName = findViewById(R.id.tv_UserName);
+
         ll_ShiftTimings = findViewById(R.id.ll_ShiftTimings);
         ll_Logout = findViewById(R.id.ll_Logout);
         ll_Exit = findViewById(R.id.ll_Exit);
@@ -90,12 +99,12 @@ public class Attendance extends AppCompatActivity {
         ll_Logout.setOnClickListener(view -> {logout(this);});
         ll_Exit.setOnClickListener(view -> {exitApp(this);});
         setAppVersion(this, tv_App_Ver_Up);
-        tv_UserName.setText(UserFullName);
-
         menu.setOnClickListener(view -> {openDrawer(drawerLayout);});
+        tv_UserName.setText(UserFullName);
+        ImageHelper.applySavedImage(this, photo);
 
         ll_Home = findViewById(R.id.ll_Home);
-        ll_Home.setOnClickListener(view -> redirectActivity(this, MainActivity.class));
+        ll_Home.setOnClickListener(view -> redirectActivity(Attendance.this, MainActivity.class));
 
         ll_Register = findViewById(R.id.ll_Register);
         ll_Register.setOnClickListener(view -> redirectActivity(this, RegisterActivity.class));
@@ -105,22 +114,51 @@ public class Attendance extends AppCompatActivity {
 
         ll_Patrolling = findViewById(R.id.ll_Patrolling);
         ll_Patrolling.setOnClickListener(view -> redirectActivity(this, Patrolling.class));
+
+        ll_Visitor = findViewById(R.id.ll_Visitor);
+        ll_Visitor.setOnClickListener(view -> redirectActivity(this, Visitor.class));
         /* Navigation Drawer*/
 
         btn_MarkAttendance = findViewById(R.id.btn_MarkAttendance);
+        btn_MarkAttendanceOut = findViewById(R.id.btn_MarkAttendanceOut);
 
         recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         attendanceListList = new ArrayList<>();
+
         loadEmployeeData();
 
         adapter = new AttendanceAdapter(this, attendanceListList);
         recyclerView.setAdapter(adapter);
 
         getLocation();
+
         checkPermissions();
-        btn_MarkAttendance.setOnClickListener(view -> scanQRCode());
+
+        btn_MarkAttendance.setOnClickListener(view ->{
+            stInOut = "IN";
+            scanQRCode();
+            btn_MarkAttendance.setVisibility(GONE);
+        });
+        btn_MarkAttendanceOut.setOnClickListener(view -> {
+            stInOut = "OUT";
+            scanQRCode();
+            btn_MarkAttendanceOut.setVisibility(GONE);
+        });
+        svSearch = findViewById(R.id.svSearch);
+        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
     @Override
     protected void onPause() {
@@ -128,10 +166,95 @@ public class Attendance extends AppCompatActivity {
         closeDrawer(drawerLayout); //On pause close Navigation Drawer
     }
     private void loadEmployeeData() {
-        // Static Data (Replace with API Data)
-        attendanceListList.add(new AttendanceList("JJ (Security Guard)", "9860294407", "12/03/2025 09:00 AM", "http://100.168.10.74/photo/Manoj.jpg"));
-        attendanceListList.add(new AttendanceList("JJ Office (House Keeping)", "8380015831", "12/03/2025 09:15 AM", "http://100.168.10.74/photo/Paveen.jpg"));
-        attendanceListList.add(new AttendanceList("Paritosh (House Keeping)", "9284839598", "12/03/2025 09:30 AM", "http://100.168.10.74/photo/Malika.jpg"));
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(GetAttnListUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    // Handle different types of exceptions for better user feedback
+                    if (e instanceof UnknownHostException) {
+                        Toast.makeText(Attendance.this, "No Internet Connection", Toast.LENGTH_LONG).show();
+                    } else if (e instanceof SocketTimeoutException) {
+                        Toast.makeText(Attendance.this, "Connection Timeout", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(Attendance.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseData = response.body().string();
+                    byte[] myid = Base64.getDecoder().decode(MobileNo);
+                    String decodedString = new String(myid);
+                    boolean found = false;
+                    String mystatus = "";
+                    try {
+                        JSONArray jsonArray = new JSONArray(responseData);
+
+                        attendanceListList.clear();
+
+                        for (int i = 0; i< jsonArray.length(); i++) {
+                            JSONObject attnObject = jsonArray.getJSONObject(i);
+
+                            String id = attnObject.optString("id","");
+                            String name = attnObject.optString("name","");
+                            String photo = attnObject.optString("photo","");
+                            String usertype = attnObject.optString("usertype","");
+                            String mobile_no = attnObject.optString("mobile_no","");
+                            String login_time = attnObject.optString("login_time","");
+                            String status = attnObject.optString("status","");
+
+                            AttendanceList attendance = new AttendanceList(id, name, usertype, mobile_no, login_time, photo, status);
+
+                            boolean finalFound = found;
+                            String finalMystatus = mystatus;
+                            runOnUiThread(()->{
+                                attendanceListList.add(attendance);
+                                AttendanceAdapter AttendanceAdapter = new AttendanceAdapter(Attendance.this, attendanceListList);
+                                recyclerView.setAdapter(AttendanceAdapter);
+
+                                if (finalFound && finalMystatus.equals("Absent")) {
+                                    btn_MarkAttendanceOut.setVisibility(GONE);
+                                    btn_MarkAttendance.setVisibility(VISIBLE);
+                                } else if (!finalFound) {
+                                    btn_MarkAttendanceOut.setVisibility(GONE);
+                                    btn_MarkAttendance.setVisibility(VISIBLE);
+                                }else if (finalFound && !finalMystatus.isEmpty()){
+                                    btn_MarkAttendanceOut.setVisibility(VISIBLE);
+                                    btn_MarkAttendance.setVisibility(GONE);
+                                }
+                            });
+
+                            for (int j = 0; j < jsonArray.length(); j++) {
+                                JSONObject obj = jsonArray.getJSONObject(j);
+                                String mymobile = obj.getString("mobile_no");
+
+                                if (mymobile.equals(decodedString)) {
+                                    mystatus = obj.getString("status");
+                                    found = true;
+                                    break; // exit loop once found
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
     }
 
     //Launch, Scan and send qr data to server
@@ -140,7 +263,6 @@ public class Attendance extends AppCompatActivity {
         options.setPrompt("Scan QR Code");
         options.setBeepEnabled(true);
         options.setOrientationLocked(true);
-
         qrCodeLauncher.launch(options);
     }
     //Open Scanner
@@ -157,7 +279,11 @@ public class Attendance extends AppCompatActivity {
                 .setTitle("Confirm Attendance")
                 .setMessage("Do you want to mark attendance?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    MarkAttendance();
+                    if(stInOut.equals("IN")){
+                        MarkAttendance();
+                    } else if (stInOut.equals("OUT")) {
+                        MarkAttendance();
+                    }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show();
@@ -178,12 +304,12 @@ public class Attendance extends AppCompatActivity {
                     Toast.makeText(Attendance.this, "Location not found", Toast.LENGTH_SHORT).show();
                     return;
                 }
- //               Toast.makeText(Attendance.this, "Location found", Toast.LENGTH_SHORT).show();
-                  btn_MarkAttendance.setEnabled(true);
+
+                btn_MarkAttendance.setEnabled(true);
+                btn_MarkAttendanceOut.setEnabled(true);
                 for (Location location : locationResult.getLocations()) {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
-//                    sendAttendanceToServer(qrData, latitude, longitude);
                 }
             }
         };
@@ -211,7 +337,13 @@ public class Attendance extends AppCompatActivity {
 
     //Uploade the scanned qr code data
     private void MarkAttendance(){
+        String formtype = "";
 
+        if(stInOut.equals("IN")) {
+            formtype = "MOBILEADD";
+        } else if (stInOut.equals("OUT")) {
+            formtype = "OUTTIME";
+        }
         String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         OkHttpClient client = new OkHttpClient.Builder()
@@ -220,10 +352,12 @@ public class Attendance extends AppCompatActivity {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .build();
         FormBody formBody = new FormBody.Builder()
-                .add("qrData", qrData)
-                .add("location", String.valueOf(latitude +", "+ longitude))
-                .add("deviceid", mId)
-                .add("id", UserTableId)
+                .add("formtype", formtype)
+                .add("code", Base64.getEncoder().encodeToString((qrData.trim()).getBytes()))
+                .add("latitude", String.valueOf(latitude))
+                .add("longitude", String.valueOf(longitude))
+                .add("device_id", mId)
+                .add("user_id", UserId)
                 .build();
         Request request = new Request.Builder()
                 .url(MarkAttendanceUrl)

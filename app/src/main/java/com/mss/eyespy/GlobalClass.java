@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
@@ -105,6 +106,19 @@ public class GlobalClass {
                 e.printStackTrace();
 
                 return false;
+            }
+        }
+    }
+    public static void deleteAllImagesInAppPicturesDir(Context context) {
+        File picturesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (picturesDir != null && picturesDir.exists()) {
+            File[] files = picturesDir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        file.delete();
+                    }
+                }
             }
         }
     }

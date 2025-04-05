@@ -22,14 +22,16 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 public class MainActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
-    ImageView menu, photo;
+    DrawerLayout drawerLayout; //Navigation drawer
+    ImageView menu, photo;//Navigation drawer
     LinearLayout ll_Home, ll_Register, ll_Attendance, ll_Patrolling, ll_ShiftTimings, ll_Logout, ll_Exit, ll_Visitor;
-    TextView tv_App_Ver_Up, tv_UserName;
+    TextView tv_App_Ver_Up, tv_UserName;//Navigation drawer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /* Navigation Drawer*/
         drawerLayout = findViewById(R.id.layoutdrawer);
         menu = findViewById(R.id.main_menu);
         photo = findViewById(R.id.iv_Photo);
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         tv_UserName.setText(UserFullName);
         ImageHelper.applySavedImage(this, photo);
 
+
         ll_Home = findViewById(R.id.ll_Home);
         ll_Home.setOnClickListener(view -> recreate());
 
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         ll_Visitor = findViewById(R.id.ll_Visitor);
         ll_Visitor.setOnClickListener(view -> redirectActivity(this, Visitor.class));
-
+        /* Navigation Drawer*/
 
 
     }

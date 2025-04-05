@@ -35,6 +35,16 @@
                 android:textAlignment="center"
                 android:drawableEnd="@drawable/ic_attendance_in"
                 android:enabled="false"/>
+            <Button
+                android:id="@+id/btn_MarkAttendanceOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="OUT"
+                android:textAlignment="center"
+                android:drawableEnd="@drawable/ic_attendance_in"
+                android:enabled="false"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/tv_OutTime"
                 android:layout_width="wrap_content"
@@ -48,12 +58,18 @@
             android:layout_height="2dp"
             android:layout_marginTop="12dp"
             android:background="@color/levendar"/>
+        <SearchView
+            android:id="@+id/svSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="Search"
+            android:drawableEnd="@drawable/ic_search"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="vertical"/>
-
         <!-- Layout Code End -->
     </LinearLayout>
     <RelativeLayout

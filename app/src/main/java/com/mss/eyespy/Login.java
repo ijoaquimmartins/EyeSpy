@@ -78,12 +78,6 @@ public class Login extends AppCompatActivity {
         etPassword.setText(" ");
         tv_editeddatetime.setText(" ");
 
-//        if (EditedDateTime.equals("")){
-//            editedDatetime = "1985-11-23T00:20:00.000000Z";
-//        }else {
-//            editedDatetime = EditedDateTime;
-//        }
-
         autologin();
 
         if(!etMobileNo.equals("") && !etPassword.equals("")){
@@ -113,23 +107,6 @@ public class Login extends AppCompatActivity {
         stPassword = Base64.getEncoder().encodeToString((etPassword.getText().toString().trim()).getBytes());
 
         MobileNo = stMobileno.toString();
-
-        /*
-        Cursor cursor = dbHelper.getUserById(stMobileno);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            int columnIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_EDITED_DATETIME);
-
-            if (columnIndex != -1) {
-                editedDatetime = cursor.getString(columnIndex);
-            } else {
-                editedDatetime = "0";
-            }
-        }
-        if (cursor != null) {
-            cursor.close();
-        }
-*/
 
         if (!stMobileno.isEmpty() && !stPassword.isEmpty()) {
             OkHttpClient client = new OkHttpClient.Builder()
@@ -231,12 +208,6 @@ public class Login extends AppCompatActivity {
         android.content.SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(MOBILE_NO, etMobileNo.getText().toString().trim());
         editor.putString(PASSWORD, etPassword.getText().toString().trim());
-    /*    editor.putString(UserFullName, first_name + " " + middle_name + " " + last_name);
-        editor.putString(UserId, userid.trim());
-        editor.putString(UserAccess, user_access.trim());
-        editor.putString(ProfilePhoto, profilephoto.trim());
-        editor.putString(EditedDateTime, editeddatetime.trim());
-        editor.putString(UserType, usertype.trim());*/
         editor.apply();
     }
     public void autologin(){

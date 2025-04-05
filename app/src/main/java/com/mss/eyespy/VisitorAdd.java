@@ -78,7 +78,6 @@ public class VisitorAdd extends AppCompatActivity {
     private static final int REQUEST_CAMERA_2 = 103;
     private static final int REQUEST_GALLERY_2 = 104;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -270,7 +269,6 @@ public class VisitorAdd extends AppCompatActivity {
 
         File imageFile1 = (uploadImage1 != null) ? new File(uploadImage1) : null;
         File imageFile2 = (uploadImage2 != null) ? new File(uploadImage2) : null;
-
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)

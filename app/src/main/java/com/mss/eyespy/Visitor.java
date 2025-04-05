@@ -62,10 +62,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Visitor extends AppCompatActivity {
-    DrawerLayout drawerLayout;
-    ImageView menu, photo;
+    DrawerLayout drawerLayout; //Navigation drawer
+    ImageView menu, photo;//Navigation drawer
     LinearLayout ll_Home, ll_Register, ll_Attendance, ll_Patrolling, ll_ShiftTimings, ll_Logout, ll_Exit, ll_Visitor;
-    TextView tv_App_Ver_Up, tv_UserName;
+    TextView tv_App_Ver_Up, tv_UserName;//Navigation drawer
     FloatingActionButton floating_action_button,floating_action_accept;
     CheckBox cb_GetLayout;
     LinearLayout ll_VisitorDateWise;
@@ -80,6 +80,7 @@ public class Visitor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visitor);
 
+        /* Navigation Drawer*/
         drawerLayout = findViewById(R.id.layoutdrawer);
         menu = findViewById(R.id.main_menu);
         photo = findViewById(R.id.iv_Photo);
@@ -95,9 +96,10 @@ public class Visitor extends AppCompatActivity {
         setAppVersion(this, tv_App_Ver_Up);
         menu.setOnClickListener(view -> {openDrawer(drawerLayout);});
         tv_UserName.setText(UserFullName);
+        ImageHelper.applySavedImage(this, photo);
 
         ll_Home = findViewById(R.id.ll_Home);
-        ll_Home.setOnClickListener(view -> redirectActivity(this, MainActivity.class));
+        ll_Home.setOnClickListener(view -> redirectActivity(Visitor.this, MainActivity.class));
 
         ll_Register = findViewById(R.id.ll_Register);
         ll_Register.setOnClickListener(view -> redirectActivity(this, RegisterActivity.class));
@@ -110,7 +112,9 @@ public class Visitor extends AppCompatActivity {
 
         ll_Visitor = findViewById(R.id.ll_Visitor);
         ll_Visitor.setOnClickListener(view -> recreate());
+        /* Navigation Drawer*/
 
+        GlobalClass.deleteAllImagesInAppPicturesDir(this);
         floating_action_button = findViewById(R.id.floating_action_button);
         floating_action_button.setOnClickListener(view -> {
             Intent i = new Intent(this, VisitorAdd.class);
@@ -128,14 +132,18 @@ public class Visitor extends AppCompatActivity {
         tv_ToDate = findViewById(R.id.tv_ToDate);
         btn_FatchData = findViewById(R.id.btn_FatchData);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        tv_FromDate.setText(sdf.format(new Date()));
-        tv_ToDate.setText(sdf.format(new Date()));
+        tv_FromDate.setText("");
+        tv_ToDate.setText("");
 
         if (cb_GetLayout.isChecked()){
             ll_VisitorDateWise.setVisibility(VISIBLE);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            tv_FromDate.setText(sdf.format(new Date()));
+            tv_ToDate.setText(sdf.format(new Date()));
         }else {
             ll_VisitorDateWise.setVisibility(GONE);
+            tv_FromDate.setText("");
+            tv_ToDate.setText("");
         }
         cb_GetLayout.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

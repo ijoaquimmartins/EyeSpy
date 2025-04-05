@@ -66,10 +66,10 @@ public class Loading extends AppCompatActivity {
     }
 
     private void loadAssets() {
-        simulateTask(2000);
+        simulateTask(200);
     }
     private void initializeComponents() {
-        simulateTask(2500); // Simulate work for 2.5 seconds
+        simulateTask(200); // Simulate work for 2.5 seconds
     }
     private void finalizeSetup() {
         try {

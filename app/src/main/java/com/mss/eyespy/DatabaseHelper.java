@@ -175,17 +175,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String formtype = "MOBILEADD";
 
-
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 qrDataList.add(new QrData(
-                        cursor.getString(cursor.getColumnIndexOrThrow("id")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("qr_code")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("latitude")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("longitude")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("datetime")),
-                        SharedPreferences.UserId,
-                        formtype
+                    cursor.getString(cursor.getColumnIndexOrThrow("id")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("qr_code")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("latitude")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("longitude")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("datetime")),
+                    SharedPreferences.UserId,
+                    formtype
                 ));
             }
             cursor.close();
@@ -193,28 +192,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return qrDataList;
     }
-//    void updateQrDataFromServer(JSONArray responseArray) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        try {
-//            for (int i = 0; i < responseArray.length(); i++) {
-//                JSONObject jsonObject = responseArray.getJSONObject(i);
-//                int id = jsonObject.getInt("id");
-//                String name = jsonObject.getString("name");
-//                int uploaded = jsonObject.getInt("uploaded");
-//                ContentValues values = new ContentValues();
-//
-//                values.put("name", name);
-//                values.put("uploaded", uploaded);
-//                db.update("scanned_qr", values, "id = ?", new String[]{String.valueOf(id)});
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } finally {
-//            db.close();
-//        }
-//    }
-
     void updateQrDataFromServer(JSONArray responseArray) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -229,9 +206,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 if (jsonObject.has("location") && !jsonObject.isNull("location")) {
                     values.put("qr_name", jsonObject.getString("location"));
                 }
-
                 values.put("uploaded", uploaded);
-
                 db.update("scanned_qr", values, "id = ?", new String[]{String.valueOf(id)});
             }
         } catch (JSONException e) {
