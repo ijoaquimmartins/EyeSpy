@@ -50,7 +50,8 @@
                     android:hint="@string/doj"
                     android:scrollbars="horizontal"
                     android:inputType="date"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    />
                 <EditText
                     android:id="@+id/et_FirstName"
                     android:layout_width="match_parent"
@@ -84,7 +85,8 @@
                     android:hint="@string/dob"
                     android:inputType="date"
                     android:scrollbars="horizontal"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    />
                 <EditText
                     android:id="@+id/et_Email"
                     android:layout_width="match_parent"

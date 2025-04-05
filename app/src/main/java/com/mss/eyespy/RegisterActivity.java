@@ -98,6 +98,8 @@ public class RegisterActivity extends AppCompatActivity {
     List<String> labels = new ArrayList<>();
     private Map<String, String> labelValueMap = new HashMap<>();
 
+    String error, msg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,6 +159,23 @@ public class RegisterActivity extends AppCompatActivity {
         btn_Clickphoto = findViewById(R.id.btn_Clickphoto);
         btn_Submit = findViewById(R.id.btn_Submit);
         btn_Cancel = findViewById(R.id.btn_Cancel);
+
+        et_DoJ.setText("");
+        et_FirstName.setText("");
+        et_MiddleName.setText("");
+        et_LastName.setText("");
+        et_DateOfBirth.setText("");
+        et_MobileNo.setText("");
+        et_Email.setText("");
+        et_AadharCard.setText("");
+        et_PAN.setText("");
+        et_PassportNo.setText("");
+        et_PermanentAddress.setText("");
+        et_CurrentAddress.setText("");
+        et_Password.setText("");
+        et_Confirm_Password.setText("");
+        cbSameAsAbove.setChecked(false);
+        spUserType.setSelection(0);
 
         et_DoJ.setOnClickListener(view -> showDatePicker(et_DoJ));
         et_DateOfBirth.setOnClickListener(view -> showDatePicker(et_DateOfBirth));
@@ -384,7 +403,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .addFormDataPart("password", stPassword)
                 .addFormDataPart("password_confirmation", stConPassword)
                 .addFormDataPart("formtype", "MOBILEADD")
-                .addFormDataPart("status", "0")
+                .addFormDataPart("status", "1")
                 .addFormDataPart("formid", "")
                 .addFormDataPart("created_by", UserId)
                 .addFormDataPart("updated_by", UserId)
@@ -408,15 +427,15 @@ public class RegisterActivity extends AppCompatActivity {
                     String responseBody = response.body().string().trim();
                     try {
                         JSONObject jsonResponse = new JSONObject(responseBody);
-                        String error = jsonResponse.optString("error", "");
-                        String msg = jsonResponse.optString("msg", "");
+                        error = jsonResponse.optString("error", "");
+                        msg = jsonResponse.optString("msg", "");
                     runOnUiThread(() -> {
-                        if(msg.equalsIgnoreCase("success")){
-                            stMassage = responseBody;
+                        if(!msg.isEmpty()){
+                            stMassage = msg;
                             showAlertDialog();
                             recreate();
-                        } else if (error.equalsIgnoreCase("failed")) {
-                            stMassage = responseBody;
+                        } else if (!error.isEmpty()) {
+                            stMassage = error;
                             showAlertDialog();
                         }else{
                             stMassage = responseBody;
